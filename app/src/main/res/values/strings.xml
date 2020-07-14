@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Memelord</string>
+    <string name="facebook_app_id">670981066790776</string>
+    <string name="fb_login_protocol_scheme">fb670981066790776</string>
+</resources>
