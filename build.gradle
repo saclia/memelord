@@ -27,4 +27,5 @@ task clean(type: Delete) {
 
 ext {
     designSupportVersion = '1.0.0'
+    parseVersion = "1.24.2"
 }

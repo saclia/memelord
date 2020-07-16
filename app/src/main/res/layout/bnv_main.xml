@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.gauravk.bubblenavigation.BubbleNavigationLinearView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/top_navigation_constraint"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="380dp"
+    android:background="@color/memelord_primary"
+    android:elevation="4dp"
+    android:padding="12dp"
+    app:bnc_mode="spread">
+
+    <com.gauravk.bubblenavigation.BubbleToggleView
+        android:id="@+id/c_item_home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/memelord_sakura_dark"
+        app:bt_active="true"
+        app:bt_badgeBackgroundColor="@color/memelord_sakura_dark"
+        app:bt_colorActive="@color/memelord_sakura"
+        app:bt_colorInactive="@android:color/black"
+        app:bt_icon="@drawable/ic_baseline_home_24"
+        app:bt_shapeColor="@color/memelord_sakura_dark"
+        app:bt_title="@string/text_home" />
+
+    <com.gauravk.bubblenavigation.BubbleToggleView
+        android:id="@+id/c_item_trending"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:bt_active="false"
+        android:backgroundTint="@color/memelord_sakura_dark"
+        app:bt_badgeBackgroundColor="@color/memelord_sakura_dark"
+        app:bt_colorActive="@color/memelord_sakura"
+        app:bt_colorInactive="@android:color/black"
+        app:bt_icon="@drawable/ic_baseline_trending_up_24"
+        app:bt_title="@string/text_trending"
+        bt_badgeText="@strimg/text_trending"/>
+
+    <com.gauravk.bubblenavigation.BubbleToggleView
+        android:id="@+id/c_item_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:bt_active="false"
+        android:backgroundTint="@color/memelord_sakura_dark"
+        app:bt_badgeBackgroundColor="@color/memelord_sakura_dark"
+        app:bt_colorActive="@color/memelord_sakura"
+        app:bt_colorInactive="@android:color/black"
+        app:bt_icon="@drawable/ic_baseline_profile"
+        app:bt_title="@string/text_profile"/>
+
+    <!-- Add more child items here - max upto 5 -->
+</com.gauravk.bubblenavigation.BubbleNavigationLinearView>

@@ -21,7 +21,20 @@
         app:srcCompat="@drawable/login_bg"
         tools:srcCompat="@drawable/login_bg" />
 
+    <ProgressBar
+        android:id="@+id/progressBar1"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/frameLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginTop="200dp"
@@ -63,9 +76,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="@+id/btnSignIn"
-                app:layout_constraintStart_toStartOf="@+id/btnSignIn"
-                app:layout_constraintTop_toBottomOf="@+id/btnSignIn">
+                app:layout_constraintEnd_toEndOf="@+id/btnSignUp"
+                app:layout_constraintStart_toStartOf="@+id/btnSignUp"
+                app:layout_constraintTop_toBottomOf="@+id/btnSignUp">
 
                 <Button
                     android:id="@+id/btnFB"
@@ -98,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:ems="10"
-                android:hint="Username, email, or password"
+                android:hint="Enter your email address"
                 android:inputType="textPersonName"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -117,7 +130,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/etUsername" />
 
             <Button
-                android:id="@+id/btnSignIn"
+                android:id="@+id/btnSignUp"
                 android:layout_width="0dp"
                 android:layout_height="60dp"
                 android:layout_marginTop="10dp"

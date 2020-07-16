@@ -3,4 +3,10 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="memelord_primary">#FAFAFA</color>
+    <color name="memelord_sakura">#F14232</color>
+    <color name="memelord_sakura_dark">#FCEAEB</color>
+    <color name="memelord_orange">#FFA265</color>
+    <color name="memelord_soft_gray">#F7F7F7</color>
+    <color name="text_color_secondary">#51000000</color>
 </resources>

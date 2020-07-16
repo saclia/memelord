@@ -7,6 +7,18 @@
     android:layout_height="match_parent">
 
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/frameLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ivBG" />
+
     <ImageView
         android:id="@+id/ivBG"
         android:layout_width="0dp"
@@ -22,6 +34,7 @@
         tools:srcCompat="@drawable/login_bg" />
 
     <FrameLayout
+        android:id="@+id/frameLayout2"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginTop="200dp"
@@ -40,8 +53,10 @@
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/rounded_login_frame"
                 tools:srcCompat="@drawable/rounded_login_frame" />
 
@@ -63,9 +78,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="@+id/btnSignIn"
-                app:layout_constraintStart_toStartOf="@+id/btnSignIn"
-                app:layout_constraintTop_toBottomOf="@+id/btnSignIn">
+                app:layout_constraintEnd_toEndOf="@+id/btnSignUp"
+                app:layout_constraintStart_toStartOf="@+id/btnSignUp"
+                app:layout_constraintTop_toBottomOf="@+id/btnSignUp">
 
                 <Button
                     android:id="@+id/btnFB"
@@ -98,7 +113,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:ems="10"
-                android:hint="Username, email, or password"
+                android:hint="Username"
                 android:inputType="textPersonName"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -108,25 +123,42 @@
                 android:id="@+id/etPassword"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
                 android:ems="10"
                 android:hint="Password"
                 android:inputType="textWebPassword"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etEmail" />
+
+            <EditText
+                android:id="@+id/etEmail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:ems="10"
+                android:hint="Email Address"
+                android:inputType="textWebEmailAddress"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/etUsername" />
 
             <Button
-                android:id="@+id/btnSignIn"
+                android:id="@+id/btnSignUp"
                 android:layout_width="0dp"
                 android:layout_height="60dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 android:backgroundTint="#FFA265"
                 android:text="Sign Up"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:cornerRadius="30dp"
                 app:layout_constraintEnd_toEndOf="@+id/etPassword"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/etPassword"
                 app:layout_constraintTop_toBottomOf="@+id/etPassword" />
 

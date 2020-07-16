@@ -2,4 +2,13 @@
     <string name="app_name">Memelord</string>
     <string name="facebook_app_id">670981066790776</string>
     <string name="fb_login_protocol_scheme">fb670981066790776</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="text_search">Search</string>
+    <string name="text_home">Home</string>
+    <string name="text_profile">Profile</string>
+    <string name="text_trending">Trending</string>
+    <string name="text_ios_back">Back</string>
+    <string name="text_latest">Latest</string>
+    <string name="text_recommended">Recommended</string>
 </resources>
