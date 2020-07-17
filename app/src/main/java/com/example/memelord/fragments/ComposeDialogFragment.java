@@ -1,15 +1,24 @@
 package com.example.memelord.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.memelord.R;
+import com.example.memelord.activities.MainActivity;
+import com.example.memelord.activities.PhotoEditorActivity;
 import com.example.memelord.databinding.FragmentComposeDialogBinding;
 
 /**
@@ -17,11 +26,21 @@ import com.example.memelord.databinding.FragmentComposeDialogBinding;
  * Use the {@link ComposeDialogFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ComposeDialogFragment extends Fragment {
+public class ComposeDialogFragment extends DialogFragment {
     public static final String TAG = ComposeDialogFragment.class.getSimpleName();
+
+    public interface FragmentLoader {
+        void loadFragment(Fragment fragment, @Nullable Bundle bundle);
+    }
 
     private FragmentComposeDialogBinding mBinding;
     private Context mContext;
+    private FragmentLoader mActivity;
+
+    private ImageView mCloseDialogBtn;
+    private TextView mTVMemeBtn;
+    private TextView mTVCopyPastaBtn;
+    private TextView mTVComposeMemeBtn;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -68,6 +87,54 @@ public class ComposeDialogFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_compose_dialog, container, false);
+        mBinding = FragmentComposeDialogBinding.inflate(inflater);
+        mCloseDialogBtn = mBinding.ibCloseDialog;
+        mTVCopyPastaBtn = mBinding.tvCopyPasta;
+        mTVMemeBtn = mBinding.tvMemeBtn;
+        mTVComposeMemeBtn = mBinding.tvCreateMeme;
+
+        View view = mBinding.getRoot();
+        mActivity = (FragmentLoader) getActivity();
+
+        mCloseDialogBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
+
+        mTVMemeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString(ComposeFragment.ARG_COMPOSE_TYPE, "meme");
+                dismiss();
+                mActivity.loadFragment(new ComposeFragment(), bundle);
+            }
+        });
+
+        mTVComposeMemeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), PhotoEditorActivity.class);
+                startActivityForResult(intent, MainActivity.REQUEST_CODE_PHOTO_EDIT);
+            }
+        });
+
+        mTVCopyPastaBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString(ComposeFragment.ARG_COMPOSE_TYPE, "copyPasta");
+                dismiss();
+                mActivity.loadFragment(new ComposeFragment(), bundle);
+            }
+        });
+        return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

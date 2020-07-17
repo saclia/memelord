@@ -4,8 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -15,14 +19,18 @@ import com.example.memelord.R;
 import com.example.memelord.databinding.ActivityMainBinding;
 import com.example.memelord.databinding.BnvMainBinding;
 import com.example.memelord.databinding.ToolbarMainBinding;
+import com.example.memelord.fragments.ComposeDialogFragment;
+import com.example.memelord.fragments.ComposeFragment;
 import com.example.memelord.fragments.FeedFragment;
 import com.example.memelord.models.Post;
 import com.gauravk.bubblenavigation.BubbleNavigationLinearView;
 import com.gauravk.bubblenavigation.listener.BubbleNavigationChangeListener;
-import com.google.android.material.bottomnavigation.BottomNavigationMenu;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ComposeDialogFragment.FragmentLoader {
     public static final String TAG = MainActivity.class.getSimpleName();
+    public static final String INTENT_KEY_IMAGE_PATH = "editedMemePath";
+    public static final String INTENT_KEY_FRAG = "fragmentToInit";
+    public static final int REQUEST_CODE_PHOTO_EDIT = 30;
 
     private ActivityMainBinding mBinding;
     private ToolbarMainBinding mToolbarBinding;
@@ -30,9 +38,13 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar mToolbar;
 
     private BubbleNavigationLinearView mBottomNav;
+
+    private CardView cvCompose;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         mBinding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = mBinding.getRoot();
 
@@ -41,8 +53,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
 
         if(getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_ios_24);
             getSupportActionBar().setTitle("");
         }
 
@@ -69,6 +79,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        cvCompose = mBinding.cvCompose;
+        cvCompose.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+//                Intent intent = new Intent(MainActivity.this, PhotoEditorActivity.class);
+//                startActivityForResult(intent, REQUEST_CODE_PHOTO_EDIT);
+                getSupportFragmentManager().beginTransaction().replace(R.id.flDialog, new ComposeDialogFragment()).commit();
+            }
+        });
+
         loadFragment(new FeedFragment(), null);
         setContentView(view);
     }
@@ -77,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()) {
             case R.id.action_back:
+                getSupportFragmentManager().popBackStack();
                 break;
             case R.id.action_search:
                 break;
@@ -84,13 +105,34 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void loadFragment(Fragment fragment, @Nullable Bundle bundle) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i(TAG, "On Activity Result [Result Code]: " + resultCode);
+        Log.i(TAG, "requestCode " + requestCode);
+        Log.i(TAG, "RES OK: " + Activity.RESULT_OK);
+        if(requestCode == REQUEST_CODE_PHOTO_EDIT && resultCode == Activity.RESULT_OK) {
+            Log.i(TAG, "User has made a meme");
+            Bundle intentExtras = getIntent().getExtras();
+            Bundle bundle = new Bundle();
+            if(intentExtras != null) {
+                String intentImagePath = intentExtras.getString(INTENT_KEY_IMAGE_PATH);
+                if(intentImagePath != null) {
+                    bundle.putString(ComposeFragment.ARG_IMAGE_PATH, intentImagePath);
+                }
+            }
+            loadFragment(new ComposeFragment(), bundle);
+        }
+
+    }
+
+    public void loadFragment(Fragment fragment, @Nullable Bundle bundle) {
         if(bundle != null)
             fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer, fragment).commit();
     }
 
-    private void readComposeFragmentData(Post post) {
+    public void readComposeFragmentData(Post post) {
         // Will send post to the FeedFragment adapter
     }
 }

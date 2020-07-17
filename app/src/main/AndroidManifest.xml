@@ -4,17 +4,23 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
 
+    <!-- Can use below to allow me to use legacy style of accessing files if all else fails   -->
+    <!--        android:requestLegacyExternalStorage="true"-->
     <application
         android:name=".ParseApplication"
-        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".activities.RegisterActivity"></activity>
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".activities.PhotoEditorActivity"></activity>
+        <activity android:name=".activities.RegisterActivity" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

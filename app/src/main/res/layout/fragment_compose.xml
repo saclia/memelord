@@ -1,14 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rlContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.ComposeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.example.memelord.customui.SquareImageView
+        android:id="@+id/ivMeme"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        android:scaleType="centerCrop"
+        tools:src="@tools:sample/avatars" />
 
-</FrameLayout>
+    <EditText
+        android:id="@+id/etPostDesc"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@+id/ivMeme"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textLongMessage|textMultiLine"
+        android:padding="10dp"
+        android:text="Name"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/btnPublish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etPostDesc"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="10dp"
+        android:text="Publish" />
+
+    <Button
+        android:id="@+id/btnUploadImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etPostDesc"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="10dp"
+        android:layout_toStartOf="@+id/btnPublish"
+        android:text="Change Image" />
+</RelativeLayout>
