@@ -22,11 +22,13 @@ import com.example.memelord.databinding.ToolbarMainBinding;
 import com.example.memelord.fragments.ComposeDialogFragment;
 import com.example.memelord.fragments.ComposeFragment;
 import com.example.memelord.fragments.FeedFragment;
+import com.example.memelord.fragments.ProfileFragment;
+import com.example.memelord.helpers.Util;
 import com.example.memelord.models.Post;
 import com.gauravk.bubblenavigation.BubbleNavigationLinearView;
 import com.gauravk.bubblenavigation.listener.BubbleNavigationChangeListener;
 
-public class MainActivity extends AppCompatActivity implements ComposeDialogFragment.FragmentLoader {
+public class MainActivity extends AppCompatActivity implements Util.FragmentLoader {
     public static final String TAG = MainActivity.class.getSimpleName();
     public static final String INTENT_KEY_IMAGE_PATH = "editedMemePath";
     public static final String INTENT_KEY_FRAG = "fragmentToInit";
@@ -73,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements ComposeDialogFrag
                         loadFragment(new FeedFragment(), bundle);
                         break;
                     case R.id.c_item_profile:
-                        Log.i(TAG, "Clicked profile.");
+                        loadFragment(new ProfileFragment(), null);
                         break;
                 }
             }

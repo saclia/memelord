@@ -20,6 +20,7 @@ import com.example.memelord.R;
 import com.example.memelord.activities.MainActivity;
 import com.example.memelord.activities.PhotoEditorActivity;
 import com.example.memelord.databinding.FragmentComposeDialogBinding;
+import com.example.memelord.helpers.Util;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,13 +30,9 @@ import com.example.memelord.databinding.FragmentComposeDialogBinding;
 public class ComposeDialogFragment extends DialogFragment {
     public static final String TAG = ComposeDialogFragment.class.getSimpleName();
 
-    public interface FragmentLoader {
-        void loadFragment(Fragment fragment, @Nullable Bundle bundle);
-    }
-
     private FragmentComposeDialogBinding mBinding;
     private Context mContext;
-    private FragmentLoader mActivity;
+    private Util.FragmentLoader mActivity;
 
     private ImageView mCloseDialogBtn;
     private TextView mTVMemeBtn;
@@ -94,7 +91,7 @@ public class ComposeDialogFragment extends DialogFragment {
         mTVComposeMemeBtn = mBinding.tvCreateMeme;
 
         View view = mBinding.getRoot();
-        mActivity = (FragmentLoader) getActivity();
+        mActivity = (Util.FragmentLoader) getActivity();
 
         mCloseDialogBtn.setOnClickListener(new View.OnClickListener() {
             @Override

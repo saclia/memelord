@@ -30,7 +30,7 @@ public class ParseApplication extends Application {
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId("fbumemelord") // should correspond to APP_ID env variable
                 .clientKey("8e08b8cd42118531b2a5bd6abb61faa079b56c09602fdfb1489a4ddc4e9c7dff")  // set explicitly unless clientKey is explicitly configured on Parse server
-                .server("http://fbumemelord.herokuapp.com/parse").build());
+                .server("http://fbumemelord.herokuapp.com/parse/").build());
         ParseFacebookUtils.initialize(getApplicationContext());
     }
 }

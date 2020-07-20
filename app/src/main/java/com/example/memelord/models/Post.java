@@ -6,6 +6,9 @@ import com.parse.ParseObject;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
+import org.parceler.Parcel;
+
+@Parcel
 @ParseClassName("Post")
 public class Post extends ParseObject {
     public static final String TAG = Post.class.getSimpleName();

@@ -3,6 +3,7 @@ package com.example.memelord.fragments;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -26,8 +27,10 @@ import com.ahmedadeltito.photoeditorsdk.PhotoEditorSDK;
 import com.example.memelord.R;
 import com.example.memelord.databinding.FragmentComposeBinding;
 import com.example.memelord.models.Post;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileDescriptor;
@@ -40,7 +43,6 @@ import java.io.IOException;
  */
 public class ComposeFragment extends BaseFragment {
     public static final String TAG = ComposeFragment.class.getSimpleName();
-    public static final int REQUEST_CODE_GALLERY = 31;
     public static final String ARG_COMPOSE_TYPE = "composeType";
     public static final String ARG_IMAGE_PATH = "imagePath";
 
@@ -61,6 +63,7 @@ public class ComposeFragment extends BaseFragment {
 
     private ImageView mIVMeme;
     private EditText mETPostDesc;
+    private EditText mETTitle;
     private Button mBTNPublish;
     private Button mBTNUploadImage;
 
@@ -108,6 +111,7 @@ public class ComposeFragment extends BaseFragment {
         mBTNPublish = mBinding.btnPublish;
         mBTNUploadImage = mBinding.btnUploadImage;
         mETPostDesc = mBinding.etPostDesc;
+        mETTitle = mBinding.etTitle;
 
         mIVMeme.setVisibility(View.GONE);
         if(mImagePath != null) {
@@ -129,8 +133,13 @@ public class ComposeFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 String body = mETPostDesc.getText().toString();
-                if(body != null && !body.isEmpty()) {
+                String title = mETTitle.getText().toString();
+                if(body == null || body.isEmpty()) {
                     Toast.makeText(getContext(), "Please enter a proper description", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(title == null || title.isEmpty()) {
+                    Toast.makeText(getContext(), "Please enter a valid title.", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 uploadPostToParse();
@@ -140,22 +149,44 @@ public class ComposeFragment extends BaseFragment {
     }
 
     private void uploadPostToParse() {
-        ParseFile file = null;
+        Log.i(TAG, "Attempting to upload file to parse");
         if(mImagePath != null) {
-            Uri filepath = Uri.parse(mImagePath);
-            Bitmap imageBitmap = uriToBitmap(filepath);
+            Bitmap imageBitmap = ((BitmapDrawable) mIVMeme.getDrawable()).getBitmap();
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
             byte[] image = stream.toByteArray();
-            file = new ParseFile(mImagePath,image);
-            file.saveInBackground();
+            ParseFile file = new ParseFile(mETTitle.getText().toString()+".png", image);
+            file.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if(e != null) {
+                        Log.e(TAG, "Failed to save file for post", e);
+                        return;
+                    }
+                    publishPost(file);
+                }
+            });
+        } else {
+            publishPost(null);
         }
+    }
+
+    private void publishPost(ParseFile file) {
         Post newPost = new Post();
         if(file != null)
             newPost.setImage(file);
         newPost.setBody(mETPostDesc.getText().toString());
+        newPost.setTitle(mETTitle.getText().toString());
         newPost.setLikesCount(0);
         newPost.setUser(ParseUser.getCurrentUser());
+        newPost.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e != null) {
+                    Log.e(TAG, "Failed to upload composed post to Parse", e);
+                }
+            }
+        });
     }
 
     private Bitmap uriToBitmap(Uri fileUri) {
@@ -187,6 +218,7 @@ public class ComposeFragment extends BaseFragment {
                 Log.e(TAG, "Failed to get an image from the gallery. Perhaps it's from a documents app - not the native gallery");
                 return;
             }
+            mImagePath = data.getData().getPath();
             Bitmap imageBitmap = uriToBitmap(data.getData());
             mIVMeme.setImageBitmap(imageBitmap);
             mIVMeme.setVisibility(View.VISIBLE);
