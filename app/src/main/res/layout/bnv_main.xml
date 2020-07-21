@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.gauravk.bubblenavigation.BubbleNavigationLinearView
+<com.example.memelord.customui.BubbleNavigationView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/top_navigation_constraint"
@@ -51,4 +51,4 @@
         app:bt_title="@string/text_profile"/>
 
     <!-- Add more child items here - max upto 5 -->
-</com.gauravk.bubblenavigation.BubbleNavigationLinearView>
+</com.example.memelord.customui.BubbleNavigationView>

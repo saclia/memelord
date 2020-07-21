@@ -12,10 +12,12 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.example.memelord.R;
+import com.example.memelord.customui.BubbleNavigationView;
 import com.example.memelord.databinding.ActivityMainBinding;
 import com.example.memelord.databinding.BnvMainBinding;
 import com.example.memelord.databinding.ToolbarMainBinding;
@@ -25,7 +27,9 @@ import com.example.memelord.fragments.FeedFragment;
 import com.example.memelord.fragments.ProfileFragment;
 import com.example.memelord.helpers.Util;
 import com.example.memelord.models.Post;
+import com.gauravk.bubblenavigation.BubbleNavigationConstraintView;
 import com.gauravk.bubblenavigation.BubbleNavigationLinearView;
+import com.gauravk.bubblenavigation.BubbleToggleView;
 import com.gauravk.bubblenavigation.listener.BubbleNavigationChangeListener;
 
 public class MainActivity extends AppCompatActivity implements Util.FragmentLoader {
@@ -39,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements Util.FragmentLoad
     private BnvMainBinding mBottomNavBinding;
     private Toolbar mToolbar;
 
-    private BubbleNavigationLinearView mBottomNav;
+    private BubbleNavigationView mBottomNav;
 
     private CardView cvCompose;
 
@@ -90,6 +94,9 @@ public class MainActivity extends AppCompatActivity implements Util.FragmentLoad
                 getSupportFragmentManager().beginTransaction().replace(R.id.flDialog, new ComposeDialogFragment()).commit();
             }
         });
+        BubbleToggleView home = view.findViewById(R.id.c_item_home);
+        home.activate();
+        home.setInitialState(true);
 
         loadFragment(new FeedFragment(), null);
         setContentView(view);

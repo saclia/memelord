@@ -23,21 +23,11 @@
             tools:src="@tools:sample/avatars" />
     </androidx.cardview.widget.CardView>
 
-    <include
-        android:id="@+id/include3"
-        layout="@layout/bnv_main"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <ImageView
         android:id="@+id/ivProfileBackground"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@+id/include3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -49,7 +39,6 @@
         android:layout_height="0dp"
         android:layout_marginTop="200dp"
         android:background="@color/memelord_primary"
-        app:layout_constraintBottom_toTopOf="@+id/include3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">

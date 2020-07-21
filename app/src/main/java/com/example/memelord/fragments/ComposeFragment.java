@@ -149,13 +149,12 @@ public class ComposeFragment extends BaseFragment {
     }
 
     private void uploadPostToParse() {
-        Log.i(TAG, "Attempting to upload file to parse");
         if(mImagePath != null) {
             Bitmap imageBitmap = ((BitmapDrawable) mIVMeme.getDrawable()).getBitmap();
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
             byte[] image = stream.toByteArray();
-            ParseFile file = new ParseFile(mETTitle.getText().toString()+".png", image);
+            ParseFile file = new ParseFile(ParseUser.getCurrentUser().getUsername()+".png", image);
             file.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {

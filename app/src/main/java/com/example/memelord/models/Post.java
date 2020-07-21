@@ -18,6 +18,7 @@ public class Post extends ParseObject {
     public static final String KEY_LIKES_COUNT = "likesCount";
     public static final String KEY_BODY = "body";
     public static final String KEY_TITLE = "title";
+    private static final String KEY_COMMENTS = "comments";
 
     public void setUser(ParseUser user) { put(KEY_USER, user); }
     public ParseUser getUser() { return getParseUser(KEY_USER); }
@@ -26,6 +27,7 @@ public class Post extends ParseObject {
     public ParseFile getImage() { return getParseFile(KEY_IMAGE); }
 
     public ParseRelation getLikes() { return getRelation(KEY_LIKES); }
+    public ParseRelation getComments() { return getRelation(KEY_COMMENTS); }
 
     public void setBody(String body) { put(KEY_BODY, body); }
     public String getBody() { return getString(KEY_BODY); }
