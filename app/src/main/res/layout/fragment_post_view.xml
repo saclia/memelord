@@ -59,6 +59,17 @@
                     android:text="3.5K"
                     android:textStyle="bold" />
 
+                <ImageButton
+                    android:id="@+id/ibShare"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignTop="@+id/ivLikeBTN"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_baseline_share_content" />
+
             </RelativeLayout>
 
             <TextView

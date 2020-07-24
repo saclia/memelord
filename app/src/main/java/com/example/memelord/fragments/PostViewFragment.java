@@ -1,11 +1,17 @@
 package com.example.memelord.fragments;
 
+import android.content.ContentValues;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -13,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -40,6 +47,9 @@ import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,6 +82,7 @@ public class PostViewFragment extends Fragment {
 
     private EditText mETDesc; // Still a display view
     private EditText mETComment;
+    private ImageButton mIBShare;
 
     private int mLikesCount;
     private boolean mLikeDebounce;
@@ -135,6 +146,7 @@ public class PostViewFragment extends Fragment {
         mETComment = mBinding.etComment;
         mETDesc = mBinding.etPostDescription;
         mIVMeme = mBinding.ivMeme;
+        mIBShare = mBinding.ibShare;
 
         mLikesCount = mPost.getLikesCount();
 
@@ -194,7 +206,49 @@ public class PostViewFragment extends Fragment {
                 return false;
             }
         });
+        mIBShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ParseFile image = mPost.getImage();
+                if(image != null) {
+                    shareImage();
+                } else {
+                    shareText();
+                }
+            }
+        });
         return view;
+    }
+
+    private void shareImage() {
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("image/png");
+        Bitmap meme = ((BitmapDrawable) mIVMeme.getDrawable()).getBitmap();
+
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, mPost.getTitle());
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+        Uri uri = getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+        OutputStream outstream;
+        try {
+            outstream = getActivity().getContentResolver().openOutputStream(uri);
+            meme.compress(Bitmap.CompressFormat.PNG, 100, outstream);
+            outstream.close();
+        } catch (Exception e) {
+            Log.e(TAG, "", e);
+            return;
+        }
+        share.putExtra(Intent.EXTRA_STREAM, uri);
+        startActivity(Intent.createChooser(share, "Memelord Meme"));
+    }
+
+    private void shareText() {
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("text/plain");
+        share.putExtra(Intent.EXTRA_TEXT,mPost.getBody());
+        share.putExtra(Intent.EXTRA_SUBJECT, mPost.getTitle());
+        startActivity(Intent.createChooser(share, "Memelord Copypasta"));
+
     }
 
     private void publishLike() {
