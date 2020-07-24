@@ -14,5 +14,6 @@
         android:icon="@drawable/ic_baseline_search_24"
         android:orderInCategory="999"
         android:title="@string/text_search"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always|collapseActionView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"/>
 </menu>

@@ -19,6 +19,7 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.facebook.ParseFacebookUtils;
+import com.parse.google.ParseGoogleUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -85,7 +86,8 @@ public class LoginActivity extends AppCompatActivity {
         mGoogleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(LoginActivity.this, FEATURE_WARN, Toast.LENGTH_SHORT).show();
+                googleLogin();
+//                Toast.makeText(LoginActivity.this, FEATURE_WARN, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -107,6 +109,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
+        ParseGoogleUtils.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -121,9 +124,28 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
                 if(user == null) {
-                    Log.e(TAG, "User cancelled login via Facebook");
+                    Log.e(TAG, "User cancelled login with Facebook");
                 } else {
 
+                    navigateToHome();
+                }
+            }
+        });
+    }
+
+    protected void googleLogin() {
+        showProgressBar();
+        ParseGoogleUtils.logIn(this, new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException e) {
+                hideProgressBar();
+                if(e != null) {
+                    Log.e(TAG, "Failed to login to Google with Parse", e);
+                    return;
+                }
+                if(user == null) {
+                    Log.e(TAG, "User cancelled login with Google");
+                } else {
                     navigateToHome();
                 }
             }

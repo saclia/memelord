@@ -26,7 +26,7 @@ public class ParseQueryer {
         void done(List data, ParseObject o);
     }
 
-    private static final int LOAD_AMOUNT = 10;
+    private int mLoadAmount = 10;
     private int mCurrentPage = 0;
 
     private boolean mDescendFlag = true;
@@ -45,14 +45,23 @@ public class ParseQueryer {
         mDescendFlag = toDescend;
     }
 
-    public void queryPosts(ParseQueryerCallback callback, @Nullable ParseUser user) {
+    public void restoreDefaults() {
+        mLoadAmount = 10;
+        mCurrentPage = 0;
+        mDescendFlag = true;
+    }
+
+    public void queryPosts(ParseQueryerCallback callback, @Nullable ParseUser user, @Nullable String title) {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
         query.include(Post.KEY_LIKES);
-        query.setLimit(LOAD_AMOUNT);
-        query.setSkip(LOAD_AMOUNT * mCurrentPage);
+        query.setLimit(mLoadAmount);
+        query.setSkip(mLoadAmount * mCurrentPage);
         if(user != null)
             query.whereEqualTo(Post.KEY_USER, user);
+        if(title != null) {
+            query.whereContains(Post.KEY_TITLE, title);
+        }
         if(mDescendFlag)
             query.addDescendingOrder(Post.KEY_CREATED_AT);
 
@@ -71,8 +80,10 @@ public class ParseQueryer {
         ParseRelation relation = post.getComments();
         ParseQuery<Comment> query = relation.getQuery();
         query.include(Comment.KEY_USER);
-        query.setLimit(LOAD_AMOUNT);
-        query.setSkip(LOAD_AMOUNT * mCurrentPage);
+        query.setLimit(mLoadAmount);
+        query.setSkip(mLoadAmount * mCurrentPage);
+        if(mDescendFlag)
+            query.addDescendingOrder(Comment.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<Comment>() {
             @Override
             public void done(List<Comment> objects, ParseException e) {

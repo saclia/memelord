@@ -3,6 +3,7 @@ package com.example.memelord.activities;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
@@ -98,8 +99,35 @@ public class MainActivity extends AppCompatActivity implements Util.FragmentLoad
         home.activate();
         home.setInitialState(true);
 
-        loadFragment(new FeedFragment(), null);
+        getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer, new FeedFragment()).commit();
         setContentView(view);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_toolbar, menu);
+
+        MenuItem myActionMenuItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) myActionMenuItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if( ! searchView.isIconified()) {
+                    searchView.setIconified(true);
+                    Bundle bundle = new Bundle();
+                    bundle.putString(FeedFragment.ARG_SEARCH_QUERY, query);
+                    loadFragment(new FeedFragment(), bundle);
+                }
+                myActionMenuItem.collapseActionView();
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -138,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements Util.FragmentLoad
     public void loadFragment(Fragment fragment, @Nullable Bundle bundle) {
         if(bundle != null)
             fragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer, fragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer, fragment).addToBackStack(fragment.getTag()).commit();
     }
 
     public void readComposeFragmentData(Post post) {

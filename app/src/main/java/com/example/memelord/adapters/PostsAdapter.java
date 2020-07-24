@@ -17,15 +17,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.memelord.R;
 import com.example.memelord.fragments.PostViewFragment;
+import com.example.memelord.fragments.ProfileFragment;
 import com.example.memelord.helpers.Util;
 import com.example.memelord.models.Post;
 import com.example.memelord.models.User;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
-import java.text.NumberFormat;
 import java.util.List;
-import java.util.Locale;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
     public static final String TAG = PostsAdapter.class.getSimpleName();
@@ -85,7 +84,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             super(itemView);
             mIVAvatar = itemView.findViewById(R.id.ivAvatar);
             mIVBG = itemView.findViewById(R.id.ivBG);
-            mTVUsername = itemView.findViewById(R.id.tvUsername);
+            mTVUsername = itemView.findViewById(R.id.etUsername);
             mTVDateCategory = itemView.findViewById(R.id.tvDateCategory);
             mTVBody = itemView.findViewById(R.id.tvBody);
             mTVLikesCount = itemView.findViewById(R.id.tvLikeCount);
@@ -118,6 +117,14 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             mTVLikesCount.setText(Util.formatNumber((double) post.getLikesCount()));
             mTVDateCategory.setText(String.format(FORMAT_DATE_CATEGORY, Util.getRelativeTimeAgo(post.getCreatedAt()), category));
 
+            mIVAvatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable(ProfileFragment.ARG_USER, (User) author);
+                    mActivity.loadFragment(new ProfileFragment(), bundle);
+                }
+            });
             mCLContent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

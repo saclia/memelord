@@ -13,6 +13,7 @@ import com.parse.Parse;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.facebook.ParseFacebookUtils;
+import com.parse.google.ParseGoogleUtils;
 
 public class ParseApplication extends Application {
     @Override
@@ -26,6 +27,7 @@ public class ParseApplication extends Application {
         ParseUser.registerSubclass(User.class);
 
         FacebookSdk.fullyInitialize();
+        ParseGoogleUtils.initialize(getString(R.string.GOOGLE_CLIENT_ID));
         AppEventsLogger.activateApp(this);
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId("fbumemelord") // should correspond to APP_ID env variable

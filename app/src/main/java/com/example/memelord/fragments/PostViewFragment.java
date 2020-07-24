@@ -120,9 +120,11 @@ public class PostViewFragment extends Fragment {
         EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(llm) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                Log.i(TAG, ""+page);
                 fetchComments(queryer, page);
             }
         };
+        mRVComments.addOnScrollListener(endlessRecyclerViewScrollListener);
 
         mTVDate = mBinding.tvDate;
         mTVViews = mBinding.tvViews;

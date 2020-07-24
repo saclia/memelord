@@ -9,4 +9,6 @@
     <color name="memelord_orange">#FFA265</color>
     <color name="memelord_soft_gray">#F7F7F7</color>
     <color name="text_color_secondary">#51000000</color>
+    <color name="background_color">#FFFFFF</color>
+    <color name="border_color">#79D6D6D6</color>
 </resources>
