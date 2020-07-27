@@ -28,15 +28,15 @@ Memelord is an app designed to allow people to have a meme-dedicated platform ge
 
 **Required Must-have Stories**
 
-* Authentication/Login
-* Create posts/texts
-* View posts/texts
-* Search for posts
-* View user posts in a detail view
-* View more info of post in a detail view
-* Share post with preview of content to other social mediums
-* Delete posts
-* Like posts
+[x] Authentication/Login
+[x] Create posts/texts
+[x] View posts/texts
+[x] Search for posts
+[x] View user posts in a detail view
+[x] View more info of post in a detail view
+[x] Share post with preview of content to other social mediums
+[x] Delete posts
+[x] Like posts
 
 **Optional Nice-to-have Stories**
 
@@ -46,8 +46,8 @@ Memelord is an app designed to allow people to have a meme-dedicated platform ge
 * UI Animations
 * Multiple file types in a post
 * Trending/Recommended section in Timeline
-* Following/Followers feature
-* Facebook/Twitter/Google SDK
+[x] Following/Followers feature
+[x] Facebook/Twitter/Google SDK
 * Hashtags and flter by post hashtags
 * Favorites view
 * Predefined post formats (Pepega, Pepe, Nani, Omae wa Mou, Kermit, Doge, Success kid, guy looking at girl with girlfriend)

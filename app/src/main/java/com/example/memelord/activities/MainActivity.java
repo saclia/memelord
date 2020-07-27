@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.example.memelord.R;
 import com.example.memelord.customui.BubbleNavigationView;
@@ -32,6 +33,7 @@ import com.gauravk.bubblenavigation.BubbleNavigationConstraintView;
 import com.gauravk.bubblenavigation.BubbleNavigationLinearView;
 import com.gauravk.bubblenavigation.BubbleToggleView;
 import com.gauravk.bubblenavigation.listener.BubbleNavigationChangeListener;
+import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity implements Util.FragmentLoader {
     public static final String TAG = MainActivity.class.getSimpleName();
@@ -45,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements Util.FragmentLoad
     private Toolbar mToolbar;
 
     private BubbleNavigationView mBottomNav;
-
+    private MenuItem mProgressBar;
     private CardView cvCompose;
 
     @Override
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements Util.FragmentLoad
         mBottomNav.setNavigationChangeListener(new BubbleNavigationChangeListener() {
             @Override
             public void onNavigationChanged(View view, int position) {
+                showProgressBar();
                 Bundle bundle;
                 switch(view.getId()) {
                     case R.id.c_item_home:
@@ -106,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements Util.FragmentLoad
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar, menu);
-
+        mProgressBar = menu.findItem(R.id.miActionProgress);
         MenuItem myActionMenuItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) myActionMenuItem.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -169,7 +172,18 @@ public class MainActivity extends AppCompatActivity implements Util.FragmentLoad
         getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer, fragment).addToBackStack(fragment.getTag()).commit();
     }
 
-    public void readComposeFragmentData(Post post) {
-        // Will send post to the FeedFragment adapter
+    public void showProgressBar() {
+        if(mProgressBar != null)
+            mProgressBar.setVisible(true);
+    }
+
+    public void hideProgressBar() {
+        if(mProgressBar != null)
+            mProgressBar.setVisible(false);
+    }
+
+    private void navigateToLogin() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 }

@@ -26,6 +26,7 @@ import com.ahmedadeltito.photoeditorsdk.BrushDrawingView;
 import com.ahmedadeltito.photoeditorsdk.PhotoEditorSDK;
 import com.example.memelord.R;
 import com.example.memelord.databinding.FragmentComposeBinding;
+import com.example.memelord.helpers.Util;
 import com.example.memelord.models.Post;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -57,6 +58,7 @@ public class ComposeFragment extends BaseFragment {
 
     private FragmentComposeBinding mBinding;
 
+    private Util.FragmentLoader mActivity;
 
     private String mImagePath;
     private String mComposeType;
@@ -66,6 +68,8 @@ public class ComposeFragment extends BaseFragment {
     private EditText mETTitle;
     private Button mBTNPublish;
     private Button mBTNUploadImage;
+
+    private boolean mPublishDebounce = false;
 
     public ComposeFragment() {
         // Required empty public constructor
@@ -107,6 +111,8 @@ public class ComposeFragment extends BaseFragment {
         mBinding = FragmentComposeBinding.inflate(inflater);
         View view = mBinding.getRoot();
 
+        mActivity = (Util.FragmentLoader) getActivity();
+
         mIVMeme = mBinding.ivMeme;
         mBTNPublish = mBinding.btnPublish;
         mBTNUploadImage = mBinding.btnUploadImage;
@@ -132,6 +138,7 @@ public class ComposeFragment extends BaseFragment {
         mBTNPublish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mActivity.showProgressBar();
                 String body = mETPostDesc.getText().toString();
                 String title = mETTitle.getText().toString();
                 if(body == null || body.isEmpty()) {
@@ -142,7 +149,11 @@ public class ComposeFragment extends BaseFragment {
                     Toast.makeText(getContext(), "Please enter a valid title.", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                uploadPostToParse();
+                if(!mPublishDebounce) {
+                    mBTNPublish.setVisibility(View.INVISIBLE);
+                    mPublishDebounce = true;
+                    uploadPostToParse();
+                }
             }
         });
         return view;
@@ -184,8 +195,12 @@ public class ComposeFragment extends BaseFragment {
                 if(e != null) {
                     Log.e(TAG, "Failed to upload composed post to Parse", e);
                 }
+                mActivity.hideProgressBar();
+                mPublishDebounce = false;
+                mBTNPublish.setVisibility(View.VISIBLE);
             }
         });
+        mActivity.loadFragment(new FeedFragment(), null);
     }
 
     private Bitmap uriToBitmap(Uri fileUri) {

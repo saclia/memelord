@@ -13,17 +13,18 @@ import android.widget.Toast;
 
 import com.example.memelord.R;
 import com.example.memelord.databinding.ActivityRegisterBinding;
+import com.example.memelord.models.Profile;
 import com.example.memelord.models.User;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.Profile;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 import com.parse.facebook.ParseFacebookUtils;
 
@@ -115,6 +116,15 @@ public class RegisterActivity extends LoginActivity {
                     Log.e(TAG, "Failed to register user via Parse", e);
                     return;
                 }
+                Profile profile = new Profile();
+                profile.setUser(user);
+                profile.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        user.setProfile(profile);
+                        user.saveInBackground();
+                    }
+                });
                 navigateToHome();
             }
         });

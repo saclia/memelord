@@ -11,4 +11,5 @@
     <color name="text_color_secondary">#51000000</color>
     <color name="background_color">#FFFFFF</color>
     <color name="border_color">#79D6D6D6</color>
+    <color name="memelord_hard_gray">#BBBBBB</color>
 </resources>

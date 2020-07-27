@@ -14,10 +14,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.memelord.models.Profile;
+import com.example.memelord.models.User;
 import com.facebook.login.widget.LoginButton;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.parse.facebook.ParseFacebookUtils;
 import com.parse.google.ParseGoogleUtils;
 
@@ -126,7 +129,7 @@ public class LoginActivity extends AppCompatActivity {
                 if(user == null) {
                     Log.e(TAG, "User cancelled login with Facebook");
                 } else {
-
+                    generateProfile(user);
                     navigateToHome();
                 }
             }
@@ -146,10 +149,29 @@ public class LoginActivity extends AppCompatActivity {
                 if(user == null) {
                     Log.e(TAG, "User cancelled login with Google");
                 } else {
+                    generateProfile(user);
                     navigateToHome();
                 }
             }
         });
+    }
+
+    protected void generateProfile(ParseUser user) {
+        Profile profile = (Profile) user.getParseObject(User.KEY_PROFILE);
+        if(profile == null)
+            profile = new Profile();
+        profile.setUser(user);
+        profile.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e != null) {
+                    Log.e(TAG, "Failed to save Profile", e);
+                    return;
+                }
+            }
+        });
+        user.put(User.KEY_PROFILE, profile);
+        user.saveInBackground();
     }
 
     protected void navigateToHome() {

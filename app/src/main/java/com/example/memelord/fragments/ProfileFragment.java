@@ -25,9 +25,12 @@ import com.example.memelord.databinding.FragmentProfileBinding;
 import com.example.memelord.helpers.EndlessRecyclerViewScrollListener;
 import com.example.memelord.helpers.ParseQueryer;
 import com.example.memelord.helpers.Util;
+import com.example.memelord.models.Comment;
 import com.example.memelord.models.Post;
 import com.example.memelord.models.Profile;
 import com.example.memelord.models.User;
+import com.parse.CountCallback;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -137,29 +140,20 @@ public class ProfileFragment extends BaseFragment {
             mBTNFollow.setVisibility(View.VISIBLE);
         }
         mProfile = (Profile) mUser.getParseObject(User.KEY_PROFILE);
-        if(mProfile == null) {
-            mProfile = createProfile();
-        }
         mProfileFollowers = mProfile.getFollowersRelation();
         mCurrentUserProfile = (Profile) mCurrentUser.getProfile();
-        if(mCurrentUserProfile == null) {
-            mCurrentUserProfile = createProfile();
-            mCurrentUser.setProfile(mCurrentUserProfile);
-            try {
-                mCurrentUserProfile.save();
-            } catch (ParseException e) {
-                Log.e(TAG, "Failed to save created profile for current user", e);
-            }
-            try {
-                mCurrentUser.save();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
         mUserFollowing = mCurrentUserProfile.getFollowingRelation();
 
-        mFollowersCount = mProfile.getFollowersCount();
-        mFollowingCount = mProfile.getFollowingCount();
+        try {
+            mFollowersCount = mProfile.fetchIfNeeded().getInt(Profile.KEY_FOLLOWERS_COUNT);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        try {
+            mFollowingCount = mProfile.fetchIfNeeded().getInt(Profile.KEY_FOLLOWING_COUNT);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         checkIfFollowing();
 
         mPosts = new ArrayList<Post>();
@@ -215,12 +209,11 @@ public class ProfileFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 if(!ParseUser.getCurrentUser().equals(mUser)) {
-                    if(mFollowingProfile) {
+                    Log.i(TAG, "Following?: " + mFollowingProfile);
+                    if(mFollowingProfile == true) {
                         unfollowProfile();
-                        mBTNFollow.setText("Follow");
                     } else {
                         followProfile();
-                        mBTNFollow.setText("Unfollow");
                     }
                 }
             }
@@ -229,64 +222,70 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void followProfile() {
+        mActivity.showProgressBar();
         mUserFollowing.add(mUser);
-        mCurrentUserProfile.setFollowingCount(mCurrentUserProfile.getFollowingCount() + 1);
+        try {
+            mCurrentUserProfile.fetchIfNeeded().put(Profile.KEY_FOLLOWING_COUNT, mCurrentUserProfile.getFollowingCount()  + 1);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         mCurrentUserProfile.saveInBackground();
         mProfileFollowers.add(mCurrentUser);
-        mProfile.setFollowersCount(++mFollowersCount);
+        mProfile.setFollowersCount(mProfile.getFollowersCount() + 1);
+        mFollowingProfile = true;
         mProfile.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
+                if(e != null) {
+                    Log.e(TAG, "Failed to save profile for current profile view", e);
+                    return;
+                }
+                mActivity.hideProgressBar();
                 mFollowingProfile = true;
             }
         });
-        mTVFollowerCount.setText(""+mFollowersCount);
+        mTVFollowerCount.setText(""+(++mFollowersCount));
+        mBTNFollow.setText("Unfollow");
     }
 
     private void checkIfFollowing() {
         ParseQuery query = mUserFollowing.getQuery();
-        query.whereEqualTo(User.KEY_OBJECT_ID, mCurrentUser.getObjectId());
-       query.getFirstInBackground(new GetCallback() {
-           @Override
-           public void done(ParseObject object, ParseException e) {
-               if(object != null) {
-                   mFollowingProfile = true;
-                   mBTNFollow.setText("Unfollow");
-               }
-               mFollowingProfile = false;
-           }
-
-           @Override
-           public void done(Object o, Throwable throwable) {
-
-           }
-       });
+        query.whereEqualTo(ParseUser.KEY_OBJECT_ID, mUser.getObjectId());
+        try {
+            ParseObject obj = query.getFirst();
+            if(obj != null) {
+                Log.i(TAG, "Settign to unfollow");
+                mFollowingProfile = true;
+                mBTNFollow.setText("Unfollow");
+                return;
+            }
+            mFollowingProfile = false;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     private void unfollowProfile() {
+        mActivity.showProgressBar();
         mUserFollowing.remove(mUser);
         mCurrentUserProfile.setFollowingCount(mCurrentUserProfile.getFollowingCount() - 1);
         mCurrentUserProfile.saveInBackground();
         mProfileFollowers.remove(mCurrentUser);
-        mProfile.setFollowersCount(--mFollowersCount);
+        mProfile.setFollowersCount(mProfile.getFollowersCount() - 1);
+        mFollowingProfile = false;
         mProfile.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
+                mActivity.hideProgressBar();
                 mFollowingProfile = false;
             }
         });
-        mTVFollowerCount.setText(""+mFollowersCount);
-    }
-
-
-    private Profile createProfile() {
-        Profile profile = new Profile();
-        profile.setUser(mUser);
-        profile.saveInBackground();
-        return profile;
+        mTVFollowerCount.setText(""+(--mFollowersCount));
+        mBTNFollow.setText("Follow");
     }
 
     private void queryPosts(int page) {
+        mActivity.showProgressBar();
         mQueryer.setPage(page);
         mQueryer.queryPosts(new ParseQueryer.ParseQueryerCallback() {
             @Override
@@ -294,6 +293,7 @@ public class ProfileFragment extends BaseFragment {
                 mPostsAdapter.addAll(data);
             }
         }, mUser, null);
+        mActivity.hideProgressBar();
         mQueryer.setPage(0);
     }
 }

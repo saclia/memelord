@@ -1,5 +1,6 @@
 package com.example.memelord.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,10 +14,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.memelord.R;
+import com.example.memelord.activities.LoginActivity;
 import com.example.memelord.adapters.PostsAdapter;
 import com.example.memelord.databinding.FragmentFeedBinding;
 import com.example.memelord.helpers.EndlessRecyclerViewScrollListener;
 import com.example.memelord.helpers.ParseQueryer;
+import com.example.memelord.helpers.Util;
 import com.example.memelord.models.Post;
 import com.parse.ParseObject;
 
@@ -38,6 +41,8 @@ public class FeedFragment extends BaseFragment {
     private String mParam2;
 
     private FragmentFeedBinding mBinding;
+
+    private Util.FragmentLoader mActivity;
 
     private String mSearchQuery;
     private List<Post> mAllPosts;
@@ -82,6 +87,9 @@ public class FeedFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        mActivity = (Util.FragmentLoader) getActivity();
+        mActivity.hideProgressBar();
+
         // Inflate the layout for this fragment
         mBinding = FragmentFeedBinding.inflate(inflater);
         View view = mBinding.getRoot();
@@ -115,11 +123,14 @@ public class FeedFragment extends BaseFragment {
     }
 
     public void queryPosts(int page) {
+        mActivity.showProgressBar();
         mQueryer.setPage(page);
         mQueryer.queryPosts(new ParseQueryer.ParseQueryerCallback() {
             @Override
             public void done(List data, ParseObject o) {
-                mAllPosts.addAll(data);
+                mActivity.hideProgressBar();
+                if(data != null)
+                    mAllPosts.addAll(data);
                 mPostsAdapter.notifyDataSetChanged();
                 mSwipeContainer.setRefreshing(false);
             }

@@ -11,7 +11,7 @@ public class Profile extends ParseObject {
     public static final String TAG = Profile.class.getSimpleName();
     public static final String KEY_USER = "user";
     public static final String KEY_FOLLOWERS_COUNT = "followersCount";
-    public static final String KEY_FOLLOWING_COUNT = "followingCOunt";
+    public static final String KEY_FOLLOWING_COUNT = "followingCount";
     public static final String KEY_FOLLOWERS = "followers";
     public static final String KEY_FOLLOWING = "following";
     public static final String KEY_BG = "background";

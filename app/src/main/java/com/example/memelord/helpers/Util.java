@@ -17,6 +17,8 @@ public class Util {
 
     public interface FragmentLoader {
         void loadFragment(Fragment fragment, @Nullable Bundle bundle);
+        void showProgressBar();
+        void hideProgressBar();
     }
 
     public static String getRelativeTimeAgo(Date createdAt) {

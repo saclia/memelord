@@ -99,8 +99,7 @@ public class PhotoEditorActivity extends AppCompatActivity implements Permission
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_compose); // TODO change to new layout
-
+        setContentView(R.layout.activity_photo_editor);
         openCamera();
     }
 
