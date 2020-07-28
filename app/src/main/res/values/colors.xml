@@ -12,4 +12,5 @@
     <color name="background_color">#FFFFFF</color>
     <color name="border_color">#79D6D6D6</color>
     <color name="memelord_hard_gray">#BBBBBB</color>
+    <color name="memelord_message_gray">#D2D2D2</color>
 </resources>

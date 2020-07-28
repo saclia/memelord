@@ -5,11 +5,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
-    <!-- Can use below to allow me to use legacy style of accessing files if all else fails   -->
-    <!--        android:requestLegacyExternalStorage="true"-->
     <application
         android:name=".ParseApplication"
         android:allowBackup="true"
@@ -19,7 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.PhotoEditorActivity"></activity>
+        <activity android:name=".activities.ConversationActivity"></activity>
+        <activity android:name=".activities.PhotoEditorActivity" />
         <activity android:name=".activities.RegisterActivity" />
 
         <meta-data

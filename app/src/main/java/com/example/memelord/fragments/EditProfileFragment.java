@@ -1,21 +1,34 @@
 package com.example.memelord.fragments;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.os.ParcelFileDescriptor;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.memelord.R;
 import com.example.memelord.databinding.FragmentEditProfileBinding;
 import com.example.memelord.models.Profile;
 import com.example.memelord.models.User;
 import com.parse.ParseUser;
+
+import java.io.FileDescriptor;
+import java.io.IOException;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +42,7 @@ public class EditProfileFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final int REQUEST_CODE_GALLERY_BG = 38;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -88,10 +102,55 @@ public class EditProfileFragment extends Fragment {
         mIVBackground = mBinding.ivProfileBackground2;
         mETUsername = mBinding.etUsername;
 
+        bindContent();
         return view;
     }
 
     private void bindContent() {
+        mETUsername.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) && (i == KeyEvent.KEYCODE_ENTER)) {
+                   String name = mETUsername.getText().toString();
+                   if(name != null && !name.isEmpty()) {
+                       ParseUser.getCurrentUser().put(User.KEY_SCREEN_NAME, name);
+                   }
+                }
+                return false;
+            }
+        });
+    }
 
+    private Bitmap uriToBitmap(Uri fileUri) {
+        try {
+            ParcelFileDescriptor parcelFileDescriptor =
+                    getActivity().getContentResolver().openFileDescriptor(fileUri, "r");
+            FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+            Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+            parcelFileDescriptor.close();
+            return image;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private void openGalleryForBG() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_CODE_GALLERY_BG);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CODE_GALLERY_BG && resultCode == getActivity().RESULT_OK) {
+            if(data == null) {
+                Log.e(TAG, "Failed to get an image from the gallery. Perhaps it's from a documents app - not the native gallery");
+                return;
+            }
+            Bitmap imageBitmap = uriToBitmap(data.getData());
+        }
     }
 }

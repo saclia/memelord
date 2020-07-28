@@ -5,7 +5,9 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.example.memelord.models.Comment;
+import com.example.memelord.models.Conversation;
 import com.example.memelord.models.Like;
+import com.example.memelord.models.Message;
 import com.example.memelord.models.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -90,6 +92,56 @@ public class ParseQueryer {
                 if(e != null) {
                     Log.e(TAG, "Failed to fetch comments from post!", e);
                     return;
+                }
+                callback.done(objects, null);
+            }
+        });
+    }
+
+    public void queryConversations(ParseQueryerCallback callback) {
+        ParseQuery<Conversation> query = ParseQuery.getQuery(Conversation.class);
+        query.include(Conversation.KEY_USER1);
+        query.include(Conversation.KEY_USER2);
+        query.setLimit(mLoadAmount);
+        query.setSkip(mLoadAmount * mCurrentPage);
+        if(mDescendFlag)
+            query.addDescendingOrder(Conversation.KEY_UPDATED_AT);
+        query.whereEqualTo(Conversation.KEY_USER1, ParseUser.getCurrentUser());
+        query.findInBackground(new FindCallback<Conversation>() {
+            @Override
+            public void done(List<Conversation> objects, ParseException e) {
+                if(e != null) {
+                    Log.e(TAG, "Failed to fetch conversations", e);
+                }
+                callback.done(objects, null);
+            }
+        });
+        query.clear(Conversation.KEY_USER1);
+        query.whereEqualTo(Conversation.KEY_USER2, ParseUser.getCurrentUser());
+        query.findInBackground(new FindCallback<Conversation>() {
+            @Override
+            public void done(List<Conversation> objects, ParseException e) {
+                if(e != null) {
+                    Log.e(TAG, "Failed to fetch conversations", e);
+                }
+                callback.done(objects, null);
+            }
+        });
+    }
+
+    public void queryMessages(ParseQueryerCallback callback, Conversation convo) {
+        ParseRelation relation = convo.getMessages();
+        ParseQuery<Message> query = relation.getQuery();
+        query.include(Message.KEY_USER);
+        query.setLimit(mLoadAmount);
+        query.setSkip(mLoadAmount * mCurrentPage);
+        if(mDescendFlag)
+            query.addDescendingOrder(Comment.KEY_CREATED_AT);
+        query.findInBackground(new FindCallback<Message>() {
+            @Override
+            public void done(List<Message> objects, ParseException e) {
+                if(e != null) {
+                    Log.e(TAG, "Failed to fetch messages in conversation", e);
                 }
                 callback.done(objects, null);
             }

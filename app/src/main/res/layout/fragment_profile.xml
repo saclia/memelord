@@ -159,7 +159,18 @@
         android:background="@android:color/transparent"
         android:foregroundTint="#000000"
         android:tint="#000000"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_log_out" />
+
+    <ImageView
+        android:id="@+id/ivDM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/ibLogOut"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_send_24" />
 </androidx.constraintlayout.widget.ConstraintLayout>

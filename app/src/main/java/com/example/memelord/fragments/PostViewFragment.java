@@ -32,6 +32,7 @@ import com.example.memelord.R;
 import com.example.memelord.adapters.CommentsAdapter;
 import com.example.memelord.databinding.FragmentPostViewBinding;
 import com.example.memelord.helpers.EndlessRecyclerViewScrollListener;
+import com.example.memelord.helpers.OnDoubleTapListener;
 import com.example.memelord.helpers.ParseQueryer;
 import com.example.memelord.helpers.Util;
 import com.example.memelord.models.Comment;
@@ -53,6 +54,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -182,9 +184,10 @@ public class PostViewFragment extends Fragment {
         if(mLike != null)
             mIVLikesBTN.setColorFilter(R.color.memelord_sakura);
 
-        mIVLikesBTN.setOnClickListener(new View.OnClickListener() {
+        mIVLikesBTN.setOnTouchListener(new OnDoubleTapListener(getActivity()) {
             @Override
-            public void onClick(View view) {
+            public void onDoubleTap(MotionEvent e) {
+                super.onDoubleTap(e);
                 publishLike();
             }
         });

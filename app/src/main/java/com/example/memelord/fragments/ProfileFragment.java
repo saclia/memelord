@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.memelord.R;
+import com.example.memelord.activities.ConversationActivity;
 import com.example.memelord.activities.LoginActivity;
 import com.example.memelord.adapters.PostsAdapter;
 import com.example.memelord.databinding.FragmentProfileBinding;
@@ -26,6 +27,7 @@ import com.example.memelord.helpers.EndlessRecyclerViewScrollListener;
 import com.example.memelord.helpers.ParseQueryer;
 import com.example.memelord.helpers.Util;
 import com.example.memelord.models.Comment;
+import com.example.memelord.models.Conversation;
 import com.example.memelord.models.Post;
 import com.example.memelord.models.Profile;
 import com.example.memelord.models.User;
@@ -69,6 +71,7 @@ public class ProfileFragment extends BaseFragment {
     private EndlessRecyclerViewScrollListener mEndlessRVSListener;
 
     private ImageButton mIBLogOut;
+    private ImageView mIVDM;
     private ImageView mIVAvatar;
     private ImageView mIVBG;
     private TextView mTVFollowingCount;
@@ -130,6 +133,7 @@ public class ProfileFragment extends BaseFragment {
         mRVPosts = mBinding.rvPosts;
         mBTNEditProfile = mBinding.btnEditProfile;
         mBTNFollow = mBinding.btnFollow;
+        mIVDM = mBinding.ivDM;
 
         mActivity = (Util.FragmentLoader) getActivity();
         mCurrentUser = (User) ParseUser.getCurrentUser();
@@ -190,6 +194,45 @@ public class ProfileFragment extends BaseFragment {
         mTVFollowingCount.setText(""+mFollowingCount);
         mTVFollowerCount.setText(""+mFollowersCount);
         mTVUsername.setText(username);
+
+        if(mUser.equals(mCurrentUser)) {
+            mIBLogOut.setVisibility(View.VISIBLE);
+        } else {
+            mIVDM.setVisibility(View.VISIBLE);
+        }
+
+        mIVDM.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mActivity.showProgressBar();
+                Conversation convo = null;
+                ParseQuery<Conversation> query = new ParseQuery<Conversation>(Conversation.class);
+                query.whereEqualTo(Conversation.KEY_USER1, mCurrentUser);
+                query.whereEqualTo(Conversation.KEY_USER2, mCurrentUser);
+                query.whereEqualTo(Conversation.KEY_USER1, mUser);
+                query.whereEqualTo(Conversation.KEY_USER2, mUser);
+                try {
+                    convo = (Conversation) query.getFirst();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if(convo == null) {
+                    convo = new Conversation();
+                    convo.setUser1(mCurrentUser);
+                    convo.setUser2(mUser);
+                    try {
+                        convo.save();
+                    } catch (ParseException e) {
+                        Log.e(TAG, "Unable to save/create new convo", e);
+                    }
+                }
+                mActivity.hideProgressBar();
+                Intent intent = new Intent(getActivity(), ConversationActivity.class);
+                intent.putExtra(ConversationActivity.ARG_CONVO, convo);
+                intent.putExtra(ConversationActivity.ARG_CONVO_USER, mUser);
+                getActivity().startActivity(intent);
+            }
+        });
 
         mIBLogOut.setOnClickListener(new View.OnClickListener() {
             @Override

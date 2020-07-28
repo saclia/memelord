@@ -25,6 +25,7 @@ import com.example.memelord.databinding.BnvMainBinding;
 import com.example.memelord.databinding.ToolbarMainBinding;
 import com.example.memelord.fragments.ComposeDialogFragment;
 import com.example.memelord.fragments.ComposeFragment;
+import com.example.memelord.fragments.DirectMessagesFragment;
 import com.example.memelord.fragments.FeedFragment;
 import com.example.memelord.fragments.ProfileFragment;
 import com.example.memelord.helpers.Util;
@@ -140,6 +141,9 @@ public class MainActivity extends AppCompatActivity implements Util.FragmentLoad
                 getSupportFragmentManager().popBackStack();
                 break;
             case R.id.action_search:
+                break;
+            case R.id.action_direct_message:
+                loadFragment(new DirectMessagesFragment(), null);
                 break;
         }
         return super.onOptionsItemSelected(item);

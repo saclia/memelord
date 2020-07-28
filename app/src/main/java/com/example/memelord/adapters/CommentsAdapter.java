@@ -12,10 +12,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.memelord.R;
+import com.example.memelord.helpers.Util;
 import com.example.memelord.models.Comment;
 import com.example.memelord.models.User;
 import com.parse.ParseFile;
 
+import java.util.Date;
 import java.util.List;
 
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
@@ -55,19 +57,31 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
 
         private ImageView mIVAvatar;
         private TextView mTVBody;
+        private TextView mTVUsername;
+        private TextView mTVDate;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             mIVAvatar = itemView.findViewById(R.id.ivAvatar);
             mTVBody = itemView.findViewById(R.id.tvBody);
+            mTVUsername = itemView.findViewById(R.id.tvUsername);
+            mTVDate = itemView.findViewById(R.id.tvDate);
         }
 
         public void bind(Comment comment) {
             ParseFile avatar = comment.getUser().getParseFile(User.KEY_AVATAR);
+            Date date = comment.getCreatedAt();
+            if (date == null)
+                date = new Date();
             if(avatar != null)
                 Glide.with(mContext).load(avatar.getUrl()).into(mIVAvatar);
+            String name = comment.getUser().getString(User.KEY_SCREEN_NAME);
+            if(name == null)
+                name = comment.getUser().getUsername();
+            mTVUsername.setText(name);
             mTVBody.setText(comment.getBody());
+            mTVDate.setText(Util.getRelativeTimeAgo(date));
         }
     }
 }

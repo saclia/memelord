@@ -3,7 +3,9 @@ package com.example.memelord;
 import android.app.Application;
 
 import com.example.memelord.models.Comment;
+import com.example.memelord.models.Conversation;
 import com.example.memelord.models.Like;
+import com.example.memelord.models.Message;
 import com.example.memelord.models.Post;
 import com.example.memelord.models.Profile;
 import com.example.memelord.models.User;
@@ -24,6 +26,8 @@ public class ParseApplication extends Application {
         ParseObject.registerSubclass(Comment.class);
         ParseObject.registerSubclass(Profile.class);
         ParseObject.registerSubclass(Like.class);
+        ParseObject.registerSubclass(Conversation.class);
+        ParseObject.registerSubclass(Message.class);
         ParseUser.registerSubclass(User.class);
 
         FacebookSdk.fullyInitialize();
