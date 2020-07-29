@@ -20,7 +20,19 @@
             android:minHeight="?attr/actionBarSize"
             android:padding="10dp"
             app:menu="@menu/menu_toolbar"
-            app:titleTextColor="@android:color/black"></androidx.appcompat.widget.Toolbar>
+            app:titleTextColor="@android:color/black">
+            <androidx.cardview.widget.CardView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                app:cardCornerRadius="100dp">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:contentDescription="@string/logo"
+                    android:layout_height="match_parent"
+                    android:src="@mipmap/ic_launcher"/>
+            </androidx.cardview.widget.CardView>
+        </androidx.appcompat.widget.Toolbar>
 
         <View
             android:layout_width="match_parent"

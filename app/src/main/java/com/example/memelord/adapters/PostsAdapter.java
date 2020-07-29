@@ -3,6 +3,7 @@ package com.example.memelord.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -96,6 +97,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             ParseFile avatar = post.getUser().getParseFile(User.KEY_AVATAR);
             ParseFile background = post.getImage();
             String category = "CopyPasta";
+            mTVBody.setText(post.getBody());
             mIVBG.setVisibility(View.GONE);
             if(avatar != null) {
                 Glide.with(mContext).load(avatar.getUrl()).into(mIVAvatar);
@@ -108,12 +110,15 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 mTVDateCategory.setTextColor(mTextColor);
                 mTVUsername.setTextColor(mTextColor);
                 mIVBG.setVisibility(View.VISIBLE);
+                mTVBody.setTextSize(24f);
+                mTVBody.setText(post.getTitle());
+                mTVBody.setTypeface(Typeface.DEFAULT_BOLD);
+                mCLContent.setBackgroundColor(mContext.getResources().getColor(R.color.memelord_sakura_light));
             }
             String name = author.getString(User.KEY_SCREEN_NAME);
             if(name == null || name.isEmpty())
                 name = author.getUsername();
             mTVUsername.setText(name);
-            mTVBody.setText(post.getBody());
             mTVLikesCount.setText(Util.formatNumber((double) post.getLikesCount()));
             mTVDateCategory.setText(String.format(FORMAT_DATE_CATEGORY, Util.getRelativeTimeAgo(post.getCreatedAt()), category));
 

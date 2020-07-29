@@ -2,13 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_back"
-        android:enabled="true"
-        android:icon="@drawable/ic_baseline_arrow_back_ios_24"
-        android:title="@string/text_ios_back"
-        android:orderInCategory="1"
-        app:showAsAction="always" />
-    <item
         android:id="@+id/action_search"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_search_24"

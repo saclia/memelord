@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-
+<com.loopeer.shadow.ShadowView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/shadow_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="10dp"
+    android:foreground="?attr/selectableItemBackground"
+    app:shadowMarginTop="10dp"
+    app:shadowRadius="14dp">
 <com.example.memelord.customui.BubbleNavigationView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/top_navigation_constraint"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="380dp"
     android:background="@color/memelord_primary"
     android:elevation="4dp"
     android:padding="12dp"
@@ -52,3 +60,4 @@
 
     <!-- Add more child items here - max upto 5 -->
 </com.example.memelord.customui.BubbleNavigationView>
+</com.loopeer.shadow.ShadowView>

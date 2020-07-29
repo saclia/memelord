@@ -44,6 +44,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
         } else {
             holder.itemView.findViewById(R.id.tvMessageBody).setBackgroundResource(R.drawable.message_sender_bubble);
         }
+        holder.itemView.findViewById(R.id.tvMessageBody).setPadding(50,20,50,20);
         holder.bind(msg);
     }
 

@@ -266,12 +266,13 @@ public class ProfileFragment extends BaseFragment {
 
     private void followProfile() {
         mActivity.showProgressBar();
-        mUserFollowing.add(mUser);
         try {
             mCurrentUserProfile.fetchIfNeeded().put(Profile.KEY_FOLLOWING_COUNT, mCurrentUserProfile.getFollowingCount()  + 1);
         } catch (ParseException e) {
             e.printStackTrace();
+            return;
         }
+        mUserFollowing.add(mUser);
         mCurrentUserProfile.saveInBackground();
         mProfileFollowers.add(mCurrentUser);
         mProfile.setFollowersCount(mProfile.getFollowersCount() + 1);
@@ -310,9 +311,16 @@ public class ProfileFragment extends BaseFragment {
 
     private void unfollowProfile() {
         mActivity.showProgressBar();
+        try {
+            mCurrentUserProfile = (Profile) mCurrentUserProfile.fetchIfNeeded();
+            mCurrentUserProfile.setFollowingCount(mCurrentUserProfile.getFollowingCount() - 1);
+        } catch (ParseException e) {
+            Log.e(TAG, "Failed to set followers count!", e);
+            return;
+        }
         mUserFollowing.remove(mUser);
-        mCurrentUserProfile.setFollowingCount(mCurrentUserProfile.getFollowingCount() - 1);
         mCurrentUserProfile.saveInBackground();
+
         mProfileFollowers.remove(mCurrentUser);
         mProfile.setFollowersCount(mProfile.getFollowersCount() - 1);
         mFollowingProfile = false;

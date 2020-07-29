@@ -4,10 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.transition.Explode;
+import android.transition.Slide;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Adapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -88,7 +93,7 @@ public class ConversationActivity extends AppCompatActivity {
         EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(llm) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                queryMessages(page);
+                queryMessages(page, false);
             }
         };
         mRVMessages.addOnScrollListener(endlessRecyclerViewScrollListener);
@@ -114,6 +119,7 @@ public class ConversationActivity extends AppCompatActivity {
                 msg.put(ParseObject.KEY_CREATED_AT, new Date());
                 mMessages.add(0, msg);
                 mMessagesAdapter.notifyItemInserted(0);
+                mRVMessages.scrollToPosition(0);
                 msg.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
@@ -126,20 +132,26 @@ public class ConversationActivity extends AppCompatActivity {
                         mConvo.saveInBackground();
                     }
                 });
+                mETMessage.clearFocus();
+                mETMessage.setText("");
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
             }
         });
 
-        queryMessages(0);
+        queryMessages(0, true);
         setContentView(view);
     }
 
-    private void queryMessages(int page) {
+    private void queryMessages(int page, boolean scroll) {
         mQueryer.setPage(page);
         mQueryer.queryMessages(new ParseQueryer.ParseQueryerCallback() {
             @Override
             public void done(List data, ParseObject o) {
                 if(data != null)
                     mMessagesAdapter.addAll(data);
+                if(scroll)
+                    mRVMessages.scrollToPosition(0);
             }
         }, mConvo);
         mQueryer.setPage(0);

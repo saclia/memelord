@@ -2,6 +2,7 @@ package com.example.memelord.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +16,12 @@ import com.bumptech.glide.Glide;
 import com.example.memelord.R;
 import com.example.memelord.activities.ConversationActivity;
 import com.example.memelord.models.Conversation;
+import com.example.memelord.models.Message;
 import com.example.memelord.models.User;
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.List;
@@ -61,12 +66,14 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
     public class ViewHolder  extends RecyclerView.ViewHolder {
         private ImageView mIVAvatar;
         private TextView mTVName;
+        private TextView mMessagePreview;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             mIVAvatar = itemView.findViewById(R.id.ivAvatar);
             mTVName = itemView.findViewById(R.id.tvUsername);
+            mMessagePreview = itemView.findViewById(R.id.tvMessagePreview);
         }
 
         public void bind(Conversation convo) {
@@ -86,7 +93,7 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
             ParseFile avatar = targetUser.getAvatar();
             if(avatar != null)
                 Glide.with(mContext).load(avatar.getUrl()).into(mIVAvatar);
-            mIVAvatar.setOnClickListener(new View.OnClickListener() {
+            this.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     User user = null;
@@ -102,6 +109,13 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
                     mContext.startActivity(intent);
                 }
             });
+            ParseQuery query = convo.getMessages().getQuery().orderByDescending(Message.KEY_CREATED_AT);
+            try {
+                ParseObject msg = query.getFirst();
+                mMessagePreview.setText(msg.getString(Message.KEY_BODY));
+            } catch (ParseException e) {
+                Log.e(TAG, "Failed to get message preview for convo: " + convo.getObjectId(), e);
+            }
         }
     }
 }

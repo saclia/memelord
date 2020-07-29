@@ -7,15 +7,19 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.transition.Explode;
+import android.transition.Slide;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.ProgressBar;
 
 import com.example.memelord.R;
@@ -64,6 +68,8 @@ public class MainActivity extends AppCompatActivity implements Util.FragmentLoad
 
         if(getSupportActionBar() != null) {
             getSupportActionBar().setTitle("");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_ios_24);
         }
 
         mBottomNavBinding = mBinding.bnv;
@@ -94,8 +100,6 @@ public class MainActivity extends AppCompatActivity implements Util.FragmentLoad
         cvCompose.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(MainActivity.this, PhotoEditorActivity.class);
-//                startActivityForResult(intent, REQUEST_CODE_PHOTO_EDIT);
                 getSupportFragmentManager().beginTransaction().replace(R.id.flDialog, new ComposeDialogFragment()).commit();
             }
         });
@@ -137,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements Util.FragmentLoad
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.action_back:
+            case android.R.id.home:
                 getSupportFragmentManager().popBackStack();
                 break;
             case R.id.action_search:
@@ -152,9 +156,6 @@ public class MainActivity extends AppCompatActivity implements Util.FragmentLoad
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i(TAG, "On Activity Result [Result Code]: " + resultCode);
-        Log.i(TAG, "requestCode " + requestCode);
-        Log.i(TAG, "RES OK: " + Activity.RESULT_OK);
         if(requestCode == REQUEST_CODE_PHOTO_EDIT && resultCode == Activity.RESULT_OK) {
             Log.i(TAG, "User has made a meme");
             Bundle intentExtras = getIntent().getExtras();
@@ -173,7 +174,9 @@ public class MainActivity extends AppCompatActivity implements Util.FragmentLoad
     public void loadFragment(Fragment fragment, @Nullable Bundle bundle) {
         if(bundle != null)
             fragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer, fragment).addToBackStack(fragment.getTag()).commit();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        ft.replace(R.id.flFragmentContainer, fragment).addToBackStack(fragment.getTag()).commit();
     }
 
     public void showProgressBar() {
