@@ -114,6 +114,14 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 mTVBody.setText(post.getTitle());
                 mTVBody.setTypeface(Typeface.DEFAULT_BOLD);
                 mCLContent.setBackgroundColor(mContext.getResources().getColor(R.color.memelord_sakura_light));
+            } else {
+                mTVUsername.setTextColor(mContext.getResources().getColor(R.color.memelord_primary_text_dark));
+                mTVBody.setTextColor(mContext.getResources().getColor(android.R.color.secondary_text_dark));
+                mTVDateCategory.setTextColor(mContext.getResources().getColor(R.color.memelord_primary_text_dark));
+                mTVBody.setTextColor(mTVBody.getTextColors().getDefaultColor());
+                mTVBody.setTextSize(10f);
+                mCLContent.setBackgroundColor(Color.WHITE);
+                mTVBody.setTypeface(Typeface.DEFAULT);
             }
             String name = author.getString(User.KEY_SCREEN_NAME);
             if(name == null || name.isEmpty())

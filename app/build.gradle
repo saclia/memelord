@@ -86,6 +86,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     implementation "com.github.parse-community.Parse-SDK-Android:parse:${parseVersion}"
+    implementation 'com.github.parse-community:ParseLiveQuery-Android:1.2.2'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.8.1'
 
     implementation 'com.github.bumptech.glide:glide:4.11.0'

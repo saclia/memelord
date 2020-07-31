@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ public class FeedFragment extends BaseFragment {
     public static final String TAG = FeedFragment.class.getSimpleName();
 
     public static final String ARG_SEARCH_QUERY = "SEARCH_QUERY";
+    private static final String ARG_TRENDING_FLAG = "TRENDING_FLAG";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -55,6 +57,9 @@ public class FeedFragment extends BaseFragment {
     private EndlessRecyclerViewScrollListener mEndlessScrollListener;
 
     private Button mBTNTrending;
+    private Button mBTNLatest;
+
+    private boolean mTrendingFlag = false;
 
     public FeedFragment() {
         // Required empty public constructor
@@ -81,6 +86,7 @@ public class FeedFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
            mSearchQuery = getArguments().getString(ARG_SEARCH_QUERY);
+           mTrendingFlag = getArguments().getBoolean(ARG_TRENDING_FLAG);
         }
     }
 
@@ -116,6 +122,27 @@ public class FeedFragment extends BaseFragment {
         mRVPosts.setLayoutManager(llm);
         mRVPosts.setAdapter(mPostsAdapter);
         mRVPosts.addOnScrollListener(mEndlessScrollListener);
+        mBTNTrending = mBinding.btnTrending;
+        mBTNLatest = mBinding.btnLatest;
+
+        mBTNTrending.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mTrendingFlag = true;
+                mPostsAdapter.clear();
+                queryPosts(0);
+            }
+        });
+
+        mBTNLatest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mTrendingFlag = false;
+                mPostsAdapter.clear();
+                queryPosts(0);
+            }
+        });
+
 
         queryPosts(0);
         //TODO Add Endless & Swipe to Refresh Listeners
@@ -134,7 +161,7 @@ public class FeedFragment extends BaseFragment {
                 mPostsAdapter.notifyDataSetChanged();
                 mSwipeContainer.setRefreshing(false);
             }
-        }, null, mSearchQuery);
+        }, null, mSearchQuery, mTrendingFlag);
         mQueryer.setPage(0);
     }
 }

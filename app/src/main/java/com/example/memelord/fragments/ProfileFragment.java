@@ -208,13 +208,22 @@ public class ProfileFragment extends BaseFragment {
                 Conversation convo = null;
                 ParseQuery<Conversation> query = new ParseQuery<Conversation>(Conversation.class);
                 query.whereEqualTo(Conversation.KEY_USER1, mCurrentUser);
-                query.whereEqualTo(Conversation.KEY_USER2, mCurrentUser);
-                query.whereEqualTo(Conversation.KEY_USER1, mUser);
                 query.whereEqualTo(Conversation.KEY_USER2, mUser);
                 try {
                     convo = (Conversation) query.getFirst();
                 } catch (ParseException e) {
                     e.printStackTrace();
+                }
+                query.clear(Conversation.KEY_USER1);
+                query.clear(Conversation.KEY_USER2);
+                if(convo == null) {
+                    query.whereEqualTo(Conversation.KEY_USER1, mUser);
+                    query.whereEqualTo(Conversation.KEY_USER2, mCurrentUser);
+                    try {
+                        convo = (Conversation) query.getFirst();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
                 if(convo == null) {
                     convo = new Conversation();
@@ -343,7 +352,7 @@ public class ProfileFragment extends BaseFragment {
             public void done(List data, ParseObject o) {
                 mPostsAdapter.addAll(data);
             }
-        }, mUser, null);
+        }, mUser, null, false);
         mActivity.hideProgressBar();
         mQueryer.setPage(0);
     }

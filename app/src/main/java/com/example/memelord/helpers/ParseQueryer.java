@@ -53,7 +53,7 @@ public class ParseQueryer {
         mDescendFlag = true;
     }
 
-    public void queryPosts(ParseQueryerCallback callback, @Nullable ParseUser user, @Nullable String title) {
+    public void queryPosts(ParseQueryerCallback callback, @Nullable ParseUser user, @Nullable String title, boolean trendingFlag) {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
         query.include(Post.KEY_LIKES);
@@ -64,9 +64,11 @@ public class ParseQueryer {
         if(title != null) {
             query.whereContains(Post.KEY_TITLE, title);
         }
-        if(mDescendFlag)
+        if(trendingFlag) {
+            query.addDescendingOrder(Post.KEY_BTS);
+        } else if(mDescendFlag) {
             query.addDescendingOrder(Post.KEY_CREATED_AT);
-
+        }
         query.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> objects, ParseException e) {

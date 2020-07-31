@@ -31,9 +31,12 @@ import com.example.memelord.models.User;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.parse.livequery.ParseLiveQueryClient;
+import com.parse.livequery.SubscriptionHandling;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -44,6 +47,10 @@ public class ConversationActivity extends AppCompatActivity {
     public static final String ARG_CONVO_USER = "TARGET_USER";
     public static final String ARG_CONVO = "TARG_CONVERSATION";
     private ActivityConversationBinding mBinding;
+
+
+    private final ParseLiveQueryClient mParseLiveQueryClient = ParseLiveQueryClient.Factory.getClient();
+
 
     private MessagesAdapter mMessagesAdapter;
     private User mUser;
@@ -140,6 +147,7 @@ public class ConversationActivity extends AppCompatActivity {
         });
 
         queryMessages(0, true);
+        manageLiveQueries();
         setContentView(view);
     }
 
@@ -155,5 +163,17 @@ public class ConversationActivity extends AppCompatActivity {
             }
         }, mConvo);
         mQueryer.setPage(0);
+    }
+
+    private void manageLiveQueries() {
+        ParseQuery<Message> parseQuery = ParseQuery.getQuery(Message.class);
+        SubscriptionHandling<Message> subscriptionHandler = mParseLiveQueryClient.subscribe(parseQuery);
+        subscriptionHandler.handleEvent(SubscriptionHandling.Event.CREATE, new SubscriptionHandling.HandleEventCallback<Message>() {
+            @Override
+            public void onEvent(ParseQuery<Message> query, Message object) {
+                mMessages.add(0, object);
+                mMessagesAdapter.notifyItemInserted(0);
+            }
+        });
     }
 }

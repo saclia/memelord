@@ -275,7 +275,20 @@ public class PostViewFragment extends Fragment {
                         return;
                     }
                     mPost.setLikesCount(mLikesCount);
-                    mPost.saveInBackground();
+                    mPost.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if(e != null) {
+                                Log.e(TAG, "Failed to save post on like [DELETE]", e);
+                                return;
+                            }
+                            try {
+                                Post.onSave(mPost);
+                            } catch (ParseException ex) {
+                                Log.e(TAG, "Failed to fetch needed data to set basic trending score", e);
+                            }
+                        }
+                    });
                     mLike = null;
                 }
             });
@@ -307,6 +320,11 @@ public class PostViewFragment extends Fragment {
                             if(e != null) {
                                 Log.e(TAG, "Failed to save post on like", e);
                                 return;
+                            }
+                            try {
+                                Post.onSave(mPost);
+                            } catch (ParseException ex) {
+                                Log.e(TAG, "Failed to fetch needed data to set basic trending score", e);
                             }
                             Log.i(TAG, "saved post on like");
                         }
