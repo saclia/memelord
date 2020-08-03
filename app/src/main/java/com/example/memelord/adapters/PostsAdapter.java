@@ -101,6 +101,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             mIVBG.setVisibility(View.GONE);
             if(avatar != null) {
                 Glide.with(mContext).load(avatar.getUrl()).into(mIVAvatar);
+            } else {
+                mIVAvatar.setImageBitmap(null);
             }
             if(background != null) {
                 category = "Classic Meme";

@@ -19,6 +19,7 @@ import java.util.Date;
 @ParseClassName("Post")
 public class Post extends ParseObject {
     public static final String TAG = Post.class.getSimpleName();
+    public static final double TREND_SCORE_CONSTANT = 1.5;
     public static final String KEY_USER = "user";
     public static final String KEY_IMAGE = "image";
     public static final String KEY_LIKES = "likes";
@@ -54,7 +55,7 @@ public class Post extends ParseObject {
         int likesCount = post.fetchIfNeeded().getInt(KEY_LIKES_COUNT);
         Date postCreatedAt = post.getCreatedAt();
         double timeInHoursSinceCreation = (double) (postCreatedAt.getTime() / (1000 * 3600));
-        double trendingScore = (likesCount/Math.pow(timeInHoursSinceCreation, 1.5));
+        double trendingScore = (likesCount/Math.pow(timeInHoursSinceCreation, TREND_SCORE_CONSTANT));
         post.setBasicTrendingScore(trendingScore);
         post.saveInBackground(new SaveCallback() {
             @Override

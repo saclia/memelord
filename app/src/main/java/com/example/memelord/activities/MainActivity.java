@@ -66,6 +66,9 @@ public class MainActivity extends AppCompatActivity implements Util.FragmentLoad
         mToolbar = mToolbarBinding.toolbar;
         setSupportActionBar(mToolbar);
 
+        if(ParseUser.getCurrentUser() == null)
+            navigateToLogin();
+
         if(getSupportActionBar() != null) {
             getSupportActionBar().setTitle("");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -79,15 +82,9 @@ public class MainActivity extends AppCompatActivity implements Util.FragmentLoad
             @Override
             public void onNavigationChanged(View view, int position) {
                 showProgressBar();
-                Bundle bundle;
                 switch(view.getId()) {
                     case R.id.c_item_home:
                         loadFragment(new FeedFragment(), null);
-                        break;
-                    case R.id.c_item_trending:
-                        bundle = new Bundle();
-                        // TODO Set bundle arguments
-                        loadFragment(new FeedFragment(), bundle);
                         break;
                     case R.id.c_item_profile:
                         loadFragment(new ProfileFragment(), null);

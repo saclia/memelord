@@ -22,11 +22,6 @@ import com.example.memelord.activities.PhotoEditorActivity;
 import com.example.memelord.databinding.FragmentComposeDialogBinding;
 import com.example.memelord.helpers.Util;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ComposeDialogFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ComposeDialogFragment extends DialogFragment {
     public static final String TAG = ComposeDialogFragment.class.getSimpleName();
 
@@ -38,16 +33,6 @@ public class ComposeDialogFragment extends DialogFragment {
     private TextView mTVMemeBtn;
     private TextView mTVCopyPastaBtn;
     private TextView mTVComposeMemeBtn;
-
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public ComposeDialogFragment() {
         // Required empty public constructor
@@ -64,20 +49,12 @@ public class ComposeDialogFragment extends DialogFragment {
     // TODO: Rename and change types and number of parameters
     public static ComposeDialogFragment newInstance(String param1, String param2) {
         ComposeDialogFragment fragment = new ComposeDialogFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override

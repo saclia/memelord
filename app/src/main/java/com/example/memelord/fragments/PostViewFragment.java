@@ -57,12 +57,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link PostViewFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class PostViewFragment extends Fragment {
+public class PostViewFragment extends BaseFragment {
     public static final String TAG = PostViewFragment.class.getSimpleName();
     public static final String ARG_POST = "PARSE_POST";
 
@@ -120,9 +115,6 @@ public class PostViewFragment extends Fragment {
         mBinding = FragmentPostViewBinding.inflate(getLayoutInflater());
         View view = mBinding.getRoot();
 
-        ParseRelation relation = mPost.getLikes();
-        ParseQuery<Like> likesQuery = relation.getQuery();
-
         mComments = new ArrayList<Comment>();
         mCommentsAdapter = new CommentsAdapter(getContext(), mComments);
         ParseQueryer queryer = ParseQueryer.getInstance();
@@ -155,6 +147,17 @@ public class PostViewFragment extends Fragment {
         mLikesCount = mPost.getLikesCount();
 
         mLikeDebounce = false;
+        bindContent();
+
+        return view;
+    }
+
+    @Override
+    protected void bindContent() {
+        super.bindContent();
+        ParseRelation relation = mPost.getLikes();
+        ParseQuery<Like> likesQuery = relation.getQuery();
+
         likesQuery.whereEqualTo(Like.KEY_USER_ID, ParseUser.getCurrentUser().getObjectId());
         likesQuery.findInBackground(new FindCallback<Like>() {
             @Override
@@ -187,11 +190,9 @@ public class PostViewFragment extends Fragment {
         mIVLikesBTN.setOnTouchListener(new OnDoubleTapListener(getActivity()) {
             @Override
             public void onDoubleTap(MotionEvent e) {
-                super.onDoubleTap(e);
                 publishLike();
             }
         });
-
 
         mETComment.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -213,6 +214,7 @@ public class PostViewFragment extends Fragment {
                 return false;
             }
         });
+
         mIBShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -224,7 +226,6 @@ public class PostViewFragment extends Fragment {
                 }
             }
         });
-        return view;
     }
 
     private void shareImage() {
@@ -264,74 +265,71 @@ public class PostViewFragment extends Fragment {
         if(mLike != null ) {
             mTVLikesCount.setText(Util.formatNumber(--mLikesCount));
             mIVLikesBTN.clearColorFilter();
-            ParseRelation relation = mPost.getLikes();
-            relation.remove(mLike);
-            mLike.deleteInBackground(new DeleteCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if(e != null) {
-                        Log.e(TAG, "Failed to removed like from relation", e);
-                        Toast.makeText(getContext(), "Your like was not removed.", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    mPost.setLikesCount(mLikesCount);
-                    mPost.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if(e != null) {
-                                Log.e(TAG, "Failed to save post on like [DELETE]", e);
-                                return;
-                            }
-                            try {
-                                Post.onSave(mPost);
-                            } catch (ParseException ex) {
-                                Log.e(TAG, "Failed to fetch needed data to set basic trending score", e);
-                            }
-                        }
-                    });
-                    mLike = null;
-                }
-            });
+            unlike(mPost);
         } else {
             mTVLikesCount.setText(Util.formatNumber(++mLikesCount));
             mIVLikesBTN.setColorFilter(R.color.memelord_sakura);
-            ParseUser currentUser = ParseUser.getCurrentUser();
-            ParseRelation relation = mPost.getLikes();
-            Like like = new Like();
-            like.setUserId(currentUser.getObjectId());
-            like.setPostId(mPost.getObjectId());
-            like.setUser(currentUser);
-            like.setPost(mPost);
-            mLike = like;
-            like.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if(e != null) {
-                        Log.e(TAG, "Failed to save like!", e);
-                        Toast.makeText(getContext(), "Your like was not registered.", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    Log.i(TAG, "saved like");
-                    relation.add(like);
-                    mPost.setLikesCount(mLikesCount);
-                    mPost.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if(e != null) {
-                                Log.e(TAG, "Failed to save post on like", e);
-                                return;
-                            }
-                            try {
-                                Post.onSave(mPost);
-                            } catch (ParseException ex) {
-                                Log.e(TAG, "Failed to fetch needed data to set basic trending score", e);
-                            }
-                            Log.i(TAG, "saved post on like");
-                        }
-                    });
-                }
-            });
+           like(mPost);
         }
+    }
+
+    private void unlike(Post post) {
+        ParseRelation relation = post.getLikes();
+        relation.remove(mLike);
+        mLike.deleteInBackground(new DeleteCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e != null) {
+                    Log.e(TAG, "Failed to removed like from relation", e);
+                    Toast.makeText(getContext(), "Your like was not removed.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                post.setLikesCount(mLikesCount);
+                updatePost(mPost);
+                mLike = null;
+            }
+        });
+    }
+
+    private void like(Post post) {
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        ParseRelation relation = post.getLikes();
+        Like like = new Like();
+        like.setUserId(currentUser.getObjectId());
+        like.setPostId(post.getObjectId());
+        like.setUser(currentUser);
+        like.setPost(post);
+        mLike = like;
+        like.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e != null) {
+                    Log.e(TAG, "Failed to save like!", e);
+                    Toast.makeText(getContext(), "Your like was not registered.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                relation.add(like);
+                post.setLikesCount(mLikesCount);
+                updatePost(post);
+            }
+        });
+    }
+
+    private void updatePost(Post post) {
+        post.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e != null) {
+                    Log.e(TAG, "Failed to save post", e);
+                    return;
+                }
+                try {
+                    Post.onSave(post);
+                } catch (ParseException ex) {
+                    Log.e(TAG, "Failed to fetch needed data to set basic trending score", e);
+                }
+            }
+        });
     }
 
     private void publishComment(String body) {

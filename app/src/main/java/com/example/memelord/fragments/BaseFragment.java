@@ -30,12 +30,4 @@ public abstract class BaseFragment extends Fragment {
     protected void bindContent() {
 
     }
-
-    public void showProgressBar() {
-
-    }
-
-    public void hideProgressBar() {
-
-    }
 }

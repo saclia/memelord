@@ -33,7 +33,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:backgroundTint="@color/memelord_soft_gray"
+                    android:backgroundTint="@color/memelord_orange"
                     android:text="@string/text_trending"
                     android:textColor="@android:color/black" />
 
@@ -42,7 +42,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
-                    android:backgroundTint="@color/memelord_soft_gray"
+                    android:backgroundTint="@color/memelord_orange"
                     android:text="@string/text_latest"
                     android:textColor="@android:color/black" />
 
@@ -50,7 +50,7 @@
                     android:id="@+id/btnRecommended"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/memelord_soft_gray"
+                    android:backgroundTint="@color/memelord_orange"
                     android:text="@string/text_recommended"
                     android:textColor="@android:color/black" />
 

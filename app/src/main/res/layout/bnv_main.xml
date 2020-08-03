@@ -34,19 +34,6 @@
         app:bt_title="@string/text_home" />
 
     <com.gauravk.bubblenavigation.BubbleToggleView
-        android:id="@+id/c_item_trending"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:bt_active="false"
-        android:backgroundTint="@color/memelord_sakura_dark"
-        app:bt_badgeBackgroundColor="@color/memelord_sakura_dark"
-        app:bt_colorActive="@color/memelord_sakura"
-        app:bt_colorInactive="@android:color/black"
-        app:bt_icon="@drawable/ic_baseline_trending_up_24"
-        app:bt_title="@string/text_trending"
-        bt_badgeText="@strimg/text_trending"/>
-
-    <com.gauravk.bubblenavigation.BubbleToggleView
         android:id="@+id/c_item_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

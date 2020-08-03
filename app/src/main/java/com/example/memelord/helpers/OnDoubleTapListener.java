@@ -5,7 +5,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class OnDoubleTapListener implements View.OnTouchListener {
+public abstract class OnDoubleTapListener implements View.OnTouchListener {
 
     private GestureDetector gestureDetector;
 
@@ -31,7 +31,5 @@ public class OnDoubleTapListener implements View.OnTouchListener {
         }
     }
 
-    public void onDoubleTap(MotionEvent e) {
-        // To be overridden when implementing listener
-    }
+    public abstract void onDoubleTap(MotionEvent e);
 }

@@ -143,10 +143,8 @@ public class BubbleNavigationView extends LinearLayout implements View.OnClickLi
      */
     private void setInitialActiveState() {
 
-        if (bubbleNavItems == null) return;
-
+        if(bubbleNavItems == null) return;
         boolean foundActiveElement = false;
-
         // find the initial state
         if (!loadPreviousState) {
             for (int i = 0; i < bubbleNavItems.size(); i++) {
@@ -251,12 +249,9 @@ public class BubbleNavigationView extends LinearLayout implements View.OnClickLi
             currentActiveItemPosition = position;
             return;
         }
-
         if (currentActiveItemPosition == position) return;
-
         if (position < 0 || position >= bubbleNavItems.size())
             return;
-
         BubbleToggleView btv = bubbleNavItems.get(position);
         btv.performClick();
     }

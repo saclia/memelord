@@ -122,15 +122,15 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void done(ParseUser user, ParseException e) {
                 hideProgressBar();
+                if(user != null) {
+                    generateProfile(user);
+                    navigateToHome();
+                } else {
+                    Log.e(TAG, "User cancelled login with Facebook");
+                }
                 if(e != null) {
                     Log.e(TAG, "Failed to login to Facebook with Parse", e);
                     return;
-                }
-                if(user == null) {
-                    Log.e(TAG, "User cancelled login with Facebook");
-                } else {
-                    generateProfile(user);
-                    navigateToHome();
                 }
             }
         });
@@ -142,15 +142,15 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void done(ParseUser user, ParseException e) {
                 hideProgressBar();
+                if(user != null) {
+                    generateProfile(user);
+                    navigateToHome();
+                } else {
+                    Log.e(TAG, "User cancelled login with Google");
+                }
                 if(e != null) {
                     Log.e(TAG, "Failed to login to Google with Parse", e);
                     return;
-                }
-                if(user == null) {
-                    Log.e(TAG, "User cancelled login with Google");
-                } else {
-                    generateProfile(user);
-                    navigateToHome();
                 }
             }
         });

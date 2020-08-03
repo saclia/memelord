@@ -1,6 +1,7 @@
 package com.example.memelord.fragments;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -65,19 +66,9 @@ public class FeedFragment extends BaseFragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FeedFragment.
-     */
     // TODO: Rename and change types and number of parameters
     public static FeedFragment newInstance(String param1, String param2) {
         FeedFragment fragment = new FeedFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -125,9 +116,14 @@ public class FeedFragment extends BaseFragment {
         mBTNTrending = mBinding.btnTrending;
         mBTNLatest = mBinding.btnLatest;
 
+        highlightBTN(mBTNLatest);
+        clearBTNColor(mBTNTrending);
+
         mBTNTrending.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                highlightBTN(mBTNTrending);
+                clearBTNColor(mBTNLatest);
                 mTrendingFlag = true;
                 mPostsAdapter.clear();
                 queryPosts(0);
@@ -137,6 +133,8 @@ public class FeedFragment extends BaseFragment {
         mBTNLatest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                highlightBTN(mBTNLatest);
+                clearBTNColor(mBTNTrending);
                 mTrendingFlag = false;
                 mPostsAdapter.clear();
                 queryPosts(0);
@@ -145,8 +143,16 @@ public class FeedFragment extends BaseFragment {
 
 
         queryPosts(0);
-        //TODO Add Endless & Swipe to Refresh Listeners
         return view;
+    }
+
+
+    private void highlightBTN(Button btn) {
+        btn.setTextColor(getContext().getResources().getColor(android.R.color.white));
+    }
+
+    private void clearBTNColor(Button btn) {
+        btn.setTextColor(getContext().getResources().getColor(android.R.color.black));
     }
 
     public void queryPosts(int page) {
