@@ -16,6 +16,7 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.facebook.ParseFacebookUtils;
 import com.parse.google.ParseGoogleUtils;
+import com.parse.livequery.ParseLiveQueryClient;
 
 public class ParseApplication extends Application {
     @Override
@@ -37,7 +38,6 @@ public class ParseApplication extends Application {
                 .applicationId("fbumemelord") // should correspond to APP_ID env variable
                 .clientKey("8e08b8cd42118531b2a5bd6abb61faa079b56c09602fdfb1489a4ddc4e9c7dff")  // set explicitly unless clientKey is explicitly configured on Parse server
                 .server("http://fbumemelord.herokuapp.com/parse/").build());
-
         ParseFacebookUtils.initialize(getApplicationContext());
     }
 }

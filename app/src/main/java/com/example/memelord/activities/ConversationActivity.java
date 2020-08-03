@@ -172,7 +172,14 @@ public class ConversationActivity extends AppCompatActivity {
             @Override
             public void onEvent(ParseQuery<Message> query, Message object) {
                 mMessages.add(0, object);
-                mMessagesAdapter.notifyItemInserted(0);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mMessagesAdapter.notifyItemInserted(0);
+                        mRVMessages.scrollToPosition(0);
+                    }
+                });
             }
         });
     }

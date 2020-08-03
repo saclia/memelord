@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -148,10 +149,22 @@ public class EditProfileFragment extends Fragment {
     }
 
     private void saveProfileAndUser() {
-        Bitmap avatarBitmap =  ((BitmapDrawable) mIVAvatar.getDrawable()).getBitmap();
-        Bitmap bgBitmap = ((BitmapDrawable) mIVBackground.getDrawable()).getBitmap();
-        ParseFile avatarFile = bitmapToParseFile(avatarBitmap, "avatar");
-        ParseFile bgFile = bitmapToParseFile(bgBitmap, "background");
+        Bitmap avatarBitmap = null;
+        Drawable avatarDrawable = mIVAvatar.getDrawable();
+        if(avatarDrawable != null) {
+            avatarBitmap = ((BitmapDrawable) avatarDrawable).getBitmap();
+        }
+        Bitmap bgBitmap = null;
+        Drawable bgDrawable = mIVBackground.getDrawable();
+        if(bgDrawable != null) {
+            bgBitmap = ((BitmapDrawable) bgDrawable).getBitmap();
+        }
+        ParseFile avatarFile = null;
+        ParseFile bgFile = null;
+        if(avatarBitmap != null)
+            avatarFile = bitmapToParseFile(avatarBitmap, "avatar");
+        if(bgBitmap != null)
+            bgFile = bitmapToParseFile(bgBitmap, "background");
         String name = mETUsername.getText().toString();
         if(bgFile != null) {
             mProfile.setBackground(bgFile);
