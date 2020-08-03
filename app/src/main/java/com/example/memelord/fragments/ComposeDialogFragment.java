@@ -80,10 +80,8 @@ public class ComposeDialogFragment extends DialogFragment {
         mTVMemeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bundle bundle = new Bundle();
-                bundle.putString(ComposeFragment.ARG_COMPOSE_TYPE, "meme");
                 dismiss();
-                mActivity.loadFragment(new ComposeFragment(), bundle);
+                mActivity.loadFragment(new ComposeFragment(), null);
             }
         });
 
@@ -99,9 +97,8 @@ public class ComposeDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
-                bundle.putString(ComposeFragment.ARG_COMPOSE_TYPE, "copyPasta");
                 dismiss();
-                mActivity.loadFragment(new ComposeFragment(), bundle);
+                mActivity.loadFragment(new ComposeFragment(), null);
             }
         });
         return view;

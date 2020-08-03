@@ -43,7 +43,6 @@ import java.io.IOException;
 
 public class ComposeFragment extends BaseFragment {
     public static final String TAG = ComposeFragment.class.getSimpleName();
-    public static final String ARG_COMPOSE_TYPE = "composeType";
     public static final String ARG_IMAGE_PATH = "imagePath";
 
     private FragmentComposeBinding mBinding;
@@ -51,7 +50,6 @@ public class ComposeFragment extends BaseFragment {
     private Util.FragmentLoader mActivity;
 
     private String mImagePath;
-    private String mComposeType;
 
     private ImageView mIVMeme;
     private EditText mETPostDesc;
@@ -75,7 +73,6 @@ public class ComposeFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         if (getArguments() != null) {
-            mComposeType = getArguments().getString(ARG_COMPOSE_TYPE);
             mImagePath = getArguments().getString(ARG_IMAGE_PATH);
         }
     }
@@ -138,7 +135,6 @@ public class ComposeFragment extends BaseFragment {
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         MenuItem instantMessageItem = menu.findItem(R.id.action_direct_message);
         instantMessageItem.setVisible(false);
-        Log.i(TAG, "Hid IM item");
         super.onPrepareOptionsMenu(menu);
     }
 
@@ -179,25 +175,11 @@ public class ComposeFragment extends BaseFragment {
                     Log.e(TAG, "Failed to upload composed post to Parse", e);
                 }
                 mActivity.hideProgressBar();
+                mActivity.loadFragment(new FeedFragment(), null);
                 mBTNPublish.setVisibility(View.VISIBLE);
             }
         });
         mPublishDebounce = false;
-        mActivity.loadFragment(new FeedFragment(), null);
-    }
-
-    private Bitmap uriToBitmap(Uri fileUri) {
-        try {
-            ParcelFileDescriptor parcelFileDescriptor =
-                    getActivity().getContentResolver().openFileDescriptor(fileUri, "r");
-            FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
-            Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
-            parcelFileDescriptor.close();
-            return image;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     private void openGallery() {

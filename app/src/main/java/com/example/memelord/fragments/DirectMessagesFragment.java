@@ -26,7 +26,6 @@ public class DirectMessagesFragment extends BaseFragment {
     private FragmentDirectMessagesBinding mBinding;
 
     private RecyclerView mRVConversations;
-    private ParseQueryer mQueryer;
     private ConversationsAdapter mConversationsAdapter;
     private List<Conversation> mConvos;
 
@@ -54,8 +53,6 @@ public class DirectMessagesFragment extends BaseFragment {
         mRVConversations = mBinding.rvConvos;
         mConvos = new ArrayList<Conversation>();
         mConversationsAdapter = new ConversationsAdapter(getContext(), mConvos);
-
-        mQueryer = ParseQueryer.getInstance();
 
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(llm) {

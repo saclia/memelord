@@ -29,6 +29,7 @@ import com.example.memelord.databinding.FragmentEditProfileBinding;
 import com.example.memelord.helpers.Util;
 import com.example.memelord.models.Profile;
 import com.example.memelord.models.User;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -38,11 +39,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileDescriptor;
 import java.io.IOException;
 
-public class EditProfileFragment extends Fragment {
+public class EditProfileFragment extends BaseFragment {
     public static final String TAG = EditProfileFragment.class.getSimpleName();
-
-    private static final int REQUEST_CODE_GALLERY_BG = 38;
-    private static final int REQUEST_CODE_GALLERY_AVATAR = 39;
 
     private FragmentEditProfileBinding mBinding;
 
@@ -91,7 +89,8 @@ public class EditProfileFragment extends Fragment {
         return view;
     }
 
-    private void bindContent() {
+    @Override
+    protected void bindContent() {
         String name = mUser.getScreenName();
         if(name == null || name.isEmpty())
             name = mUser.getUsername();
@@ -134,37 +133,21 @@ public class EditProfileFragment extends Fragment {
         });
     }
 
-    private Bitmap uriToBitmap(Uri fileUri) {
-        try {
-            ParcelFileDescriptor parcelFileDescriptor =
-                    getActivity().getContentResolver().openFileDescriptor(fileUri, "r");
-            FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
-            Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
-            parcelFileDescriptor.close();
-            return image;
-        } catch (IOException e) {
-            e.printStackTrace();
+    private ParseFile imageToParseFile(ImageView iv, String name) {
+        Bitmap imageBitmap = null;
+        Drawable drawable = iv.getDrawable();
+        if(drawable != null) {
+            imageBitmap = ((BitmapDrawable) drawable).getBitmap();
         }
-        return null;
+        ParseFile file = null;
+        if(imageBitmap != null)
+            file = bitmapToParseFile(imageBitmap, name);
+        return file;
     }
 
     private void saveProfileAndUser() {
-        Bitmap avatarBitmap = null;
-        Drawable avatarDrawable = mIVAvatar.getDrawable();
-        if(avatarDrawable != null) {
-            avatarBitmap = ((BitmapDrawable) avatarDrawable).getBitmap();
-        }
-        Bitmap bgBitmap = null;
-        Drawable bgDrawable = mIVBackground.getDrawable();
-        if(bgDrawable != null) {
-            bgBitmap = ((BitmapDrawable) bgDrawable).getBitmap();
-        }
-        ParseFile avatarFile = null;
-        ParseFile bgFile = null;
-        if(avatarBitmap != null)
-            avatarFile = bitmapToParseFile(avatarBitmap, "avatar");
-        if(bgBitmap != null)
-            bgFile = bitmapToParseFile(bgBitmap, "background");
+        ParseFile avatarFile = imageToParseFile(mIVAvatar, "avatar");
+        ParseFile bgFile = imageToParseFile(mIVBackground, "background");
         String name = mETUsername.getText().toString();
         if(bgFile != null) {
             mProfile.setBackground(bgFile);
@@ -229,14 +212,6 @@ public class EditProfileFragment extends Fragment {
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_CODE);
     }
 
-    private void setAvatarPreview(Bitmap imageBitmap) {
-        mIVAvatar.setImageBitmap(imageBitmap);
-    }
-
-    private void setBackgroundBitmap(Bitmap imageBitmap) {
-        mIVBackground.setImageBitmap(imageBitmap);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -247,9 +222,9 @@ public class EditProfileFragment extends Fragment {
             }
             Bitmap imageBitmap = uriToBitmap(data.getData());
             if(requestCode == REQUEST_CODE_GALLERY_AVATAR) {
-                setAvatarPreview(imageBitmap);
+                mIVAvatar.setImageBitmap(imageBitmap);
             } else if(requestCode == REQUEST_CODE_GALLERY_BG) {
-                setBackgroundBitmap(imageBitmap);
+                mIVBackground.setImageBitmap(imageBitmap);
             }
         }
     }
