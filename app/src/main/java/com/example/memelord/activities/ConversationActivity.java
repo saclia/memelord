@@ -123,6 +123,7 @@ public class ConversationActivity extends AppCompatActivity {
                 Message msg = new Message();
                 msg.setUser(mCurrentUser);
                 msg.setBody(body);
+                msg.setConversation(mConvo);
                 msg.put(ParseObject.KEY_CREATED_AT, new Date());
                 mMessages.add(0, msg);
                 mMessagesAdapter.notifyItemInserted(0);
@@ -167,6 +168,8 @@ public class ConversationActivity extends AppCompatActivity {
 
     private void manageLiveQueries() {
         ParseQuery<Message> parseQuery = ParseQuery.getQuery(Message.class);
+        parseQuery.whereEqualTo(Message.KEY_CONVO, mConvo);
+        parseQuery.whereEqualTo(Message.KEY_USER, mUser);
         SubscriptionHandling<Message> subscriptionHandler = mParseLiveQueryClient.subscribe(parseQuery);
         subscriptionHandler.handleEvent(SubscriptionHandling.Event.CREATE, new SubscriptionHandling.HandleEventCallback<Message>() {
             @Override

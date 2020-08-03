@@ -11,10 +11,14 @@ import org.parceler.Parcel;
 public class Message extends ParseObject {
     public static final String KEY_USER = "user";
     public static final String KEY_BODY = "body";
+    public static final String KEY_CONVO = "convo";
 
     public void setUser(ParseUser user) { put(KEY_USER, user); }
     public ParseUser getUser() { return getParseUser(KEY_USER); }
 
     public void setBody(String body) { put(KEY_BODY, body); }
     public String getBody() { return getString(KEY_BODY); }
+
+    public void setConversation(Conversation convo) { put(KEY_CONVO, convo); }
+    public ParseObject getConversation() { return getParseObject(KEY_CONVO); }
 }
