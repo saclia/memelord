@@ -51,6 +51,12 @@ public class DirectMessagesFragment extends BaseFragment {
         View view = mBinding.getRoot();
 
         mRVConversations = mBinding.rvConvos;
+        bindContent();
+        return view;
+    }
+
+    @Override
+    protected void bindContent() {
         mConvos = new ArrayList<Conversation>();
         mConversationsAdapter = new ConversationsAdapter(getContext(), mConvos);
 
@@ -67,7 +73,6 @@ public class DirectMessagesFragment extends BaseFragment {
 
 
         queryConversations(0);
-        return view;
     }
 
     public void queryConversations(int page) {

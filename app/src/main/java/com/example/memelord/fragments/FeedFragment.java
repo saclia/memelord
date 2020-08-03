@@ -50,8 +50,6 @@ public class FeedFragment extends BaseFragment {
     private String mSearchQuery;
     private List<Post> mAllPosts;
 
-    private ParseQueryer mQueryer;
-
     private RecyclerView mRVPosts;
     private PostsAdapter mPostsAdapter;
     private SwipeRefreshLayout mSwipeContainer;
@@ -91,12 +89,21 @@ public class FeedFragment extends BaseFragment {
         mBinding = FragmentFeedBinding.inflate(inflater);
         View view = mBinding.getRoot();
 
-        mQueryer = ParseQueryer.getInstance();
-        mAllPosts = new ArrayList<Post>();
+
         mRVPosts = mBinding.rvPosts;
+        mBTNTrending = mBinding.btnTrending;
+        mBTNLatest = mBinding.btnLatest;
+        mSwipeContainer = mBinding.swipeContainer;
+
+        bindContent();
+        return view;
+    }
+
+    @Override
+    protected void bindContent() {
+        mAllPosts = new ArrayList<Post>();
         mPostsAdapter = new PostsAdapter(getActivity(), getContext(), mAllPosts);
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
-        mSwipeContainer = mBinding.swipeContainer;
         mEndlessScrollListener = new EndlessRecyclerViewScrollListener(llm) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
@@ -113,8 +120,6 @@ public class FeedFragment extends BaseFragment {
         mRVPosts.setLayoutManager(llm);
         mRVPosts.setAdapter(mPostsAdapter);
         mRVPosts.addOnScrollListener(mEndlessScrollListener);
-        mBTNTrending = mBinding.btnTrending;
-        mBTNLatest = mBinding.btnLatest;
 
         highlightBTN(mBTNLatest);
         clearBTNColor(mBTNTrending);
@@ -141,11 +146,8 @@ public class FeedFragment extends BaseFragment {
             }
         });
 
-
         queryPosts(0);
-        return view;
     }
-
 
     private void highlightBTN(Button btn) {
         btn.setTextColor(getContext().getResources().getColor(android.R.color.white));

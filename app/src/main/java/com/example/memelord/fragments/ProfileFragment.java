@@ -63,7 +63,6 @@ public class ProfileFragment extends BaseFragment {
     private Util.FragmentLoader mActivity;
     private User mUser;
     private Profile mProfile;
-    private ParseQueryer mQueryer;
     private List<Post> mPosts;
 
     private RecyclerView mRVPosts;
@@ -162,8 +161,6 @@ public class ProfileFragment extends BaseFragment {
             }
         };
         mRVPosts.addOnScrollListener(mEndlessRVSListener);
-
-        mQueryer = ParseQueryer.getInstance();
 
         bindContent();
         return view;

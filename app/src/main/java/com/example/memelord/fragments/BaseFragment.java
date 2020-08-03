@@ -39,9 +39,7 @@ public abstract class BaseFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_base, container, false);
     }
 
-    protected void bindContent() {
-
-    }
+    protected abstract void bindContent();
 
     protected Bitmap uriToBitmap(Uri fileUri) {
         try {

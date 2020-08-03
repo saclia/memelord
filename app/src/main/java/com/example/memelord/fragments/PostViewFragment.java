@@ -145,16 +145,14 @@ public class PostViewFragment extends BaseFragment {
         mIBShare = mBinding.ibShare;
 
         mLikesCount = mPost.getLikesCount();
-
         mLikeDebounce = false;
-        bindContent();
 
+        bindContent();
         return view;
     }
 
     @Override
     protected void bindContent() {
-        super.bindContent();
         ParseRelation relation = mPost.getLikes();
         ParseQuery<Like> likesQuery = relation.getQuery();
 

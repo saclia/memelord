@@ -91,7 +91,12 @@ public class ComposeFragment extends BaseFragment {
         mBTNUploadImage = mBinding.btnUploadImage;
         mETPostDesc = mBinding.etPostDesc;
         mETTitle = mBinding.etTitle;
+        bindContent();
+        return view;
+    }
 
+    @Override
+    protected void bindContent() {
         mIVMeme.setVisibility(View.GONE);
         if(mImagePath != null) {
             Uri filepath = Uri.parse(mImagePath);
@@ -128,7 +133,6 @@ public class ComposeFragment extends BaseFragment {
                 }
             }
         });
-        return view;
     }
 
     @Override
