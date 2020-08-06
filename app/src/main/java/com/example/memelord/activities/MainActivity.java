@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements Util.FragmentLoad
         if(bundle != null)
             fragment.setArguments(bundle);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_left_in, R.anim.slide_right_out);
         ft.replace(R.id.flFragmentContainer, fragment).addToBackStack(fragment.getTag()).commit();
     }
 

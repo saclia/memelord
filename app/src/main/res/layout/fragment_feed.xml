@@ -46,14 +46,6 @@
                     android:text="@string/text_latest"
                     android:textColor="@android:color/black" />
 
-                <Button
-                    android:id="@+id/btnRecommended"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/memelord_orange"
-                    android:text="@string/text_recommended"
-                    android:textColor="@android:color/black" />
-
             </LinearLayout>
         </HorizontalScrollView>
 

@@ -54,8 +54,10 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
     }
 
     public void addAll(List<Conversation> convos) {
-        mConversations.addAll(convos);
-        notifyDataSetChanged();
+        if(convos != null) {
+            mConversations.addAll(convos);
+            notifyDataSetChanged();
+        }
     }
 
     public void clear(List<Conversation> convos) {

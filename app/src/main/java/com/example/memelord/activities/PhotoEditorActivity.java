@@ -124,8 +124,6 @@ public class PhotoEditorActivity extends AppCompatActivity implements Permission
             Log.i("PESDK", "Source image is located here " + data.getSourceUri());
             Log.i("PESDK", "Result image is located here " + data.getResultUri());
 
-            // TODO: Do something with the result image
-
             // Pass image file path to MainActivity via intent and fetch image from activity
             Uri fileUri = data.getResultUri();
             if(fileUri != null) {
